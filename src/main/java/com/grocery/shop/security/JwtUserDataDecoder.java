@@ -33,9 +33,6 @@ public class JwtUserDataDecoder {
                 logger.error("an error occured during getting email from token", e);
             } catch (ExpiredJwtException e) {
                 logger.warn("the token is expired and not valid anymore", e);
-            } catch (SignatureException e) {
-                // todo
-                logger.error("Authentication Failed. Username or Password not valid.");
             }
         } else {
             logger.warn("couldn't find bearer string, will ignore the token");
