@@ -30,6 +30,7 @@ public class JwtUserDataValidator {
             return false;
         }
 
+        // todo
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             return false;
         }

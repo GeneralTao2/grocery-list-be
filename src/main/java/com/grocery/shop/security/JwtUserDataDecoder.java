@@ -34,6 +34,7 @@ public class JwtUserDataDecoder {
             } catch (ExpiredJwtException e) {
                 logger.warn("the token is expired and not valid anymore", e);
             } catch (SignatureException e) {
+                // todo
                 logger.error("Authentication Failed. Username or Password not valid.");
             }
         } else {

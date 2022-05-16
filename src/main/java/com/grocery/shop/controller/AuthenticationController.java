@@ -26,6 +26,7 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login")
     public LoginResponse register(@RequestBody LoginUser loginUser) throws AuthenticationException {
+        // todo
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginUser.getEmail(),
@@ -34,8 +35,10 @@ public class AuthenticationController {
 
         final User user = userRepository.findByEmail(loginUser.getEmail())
                 .orElseThrow(UserNotFoundException::new);
+
         final String token = jwtTokenUtil.generateToken(user);
-        return new LoginResponse(token, user.getEmail());
+
+        return new LoginResponse(token, user.getRole().toString());
     }
 
 

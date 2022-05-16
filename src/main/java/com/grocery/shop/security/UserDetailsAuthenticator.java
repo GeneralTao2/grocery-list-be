@@ -26,6 +26,8 @@ public class UserDetailsAuthenticator {
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null,
                         userDetails.getAuthorities());
+
+        // todo
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
 
         logger.info("authenticated user " + userDetails.getUsername() + ", setting security context");
