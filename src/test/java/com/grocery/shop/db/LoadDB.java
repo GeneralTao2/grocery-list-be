@@ -1,4 +1,4 @@
-package com.grocery.shop.service;
+package com.grocery.shop.db;
 
 import com.grocery.shop.model.Role;
 import com.grocery.shop.model.User;
@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
-// FOR MANUAL TESTS PURPOSE
+// TODO:https://www.jenkins.io/
 @Configuration
 public class LoadDB {
     @Bean
