@@ -15,6 +15,10 @@
     <description>spring_grocery_shop</description>
     <properties>
         <java.version>11</java.version>
+    <!--
+        <flyway-db.user>postgres</flyway-db.user>
+        <flyway-db.password>postgres</flyway-db.password>
+        <flyway-db.url>jdbc:postgresql://localhost:5432/grocery_shop</flyway-db.url> -->
     </properties>
     <dependencies>
         <dependency>
@@ -45,6 +49,18 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -53,6 +69,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!--
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <configuration>
+                    <url>${flyway-db.url}</url>
+                    <user>${flyway-db.user}</user>
+                    <password>${flyway-db.password}</password>
+                </configuration>
+            </plugin> -->
         </plugins>
     </build>
 
