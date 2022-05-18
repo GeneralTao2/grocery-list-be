@@ -19,7 +19,7 @@ public class ProductServiceImpl {
 
     List<ProductDtoShort> getPage(final List<Product> productList, final int resultsPerPage, final int pageNumber) {
         int lastPossiblePage = (int) Math.ceil(((double) productList.size()) / resultsPerPage);
-        if (pageNumber < 1 || pageNumber > lastPossiblePage) {
+        if (pageNumber < 2 || pageNumber > lastPossiblePage) {
             throw new PageNotFoundException("This page does not exist");
         }
         int skipCount = (pageNumber - 1) * resultsPerPage;

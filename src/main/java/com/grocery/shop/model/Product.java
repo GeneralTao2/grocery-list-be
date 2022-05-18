@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -18,25 +19,26 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "products")
+@SequenceGenerator(name = "product_generator", sequenceName = "product_seq", allocationSize = 1)
 public class Product {
 
     @Id
-    @Column(name = "product_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_generator")
     private Long productId;
 
-    @Column(name = "product_image")
+    @Column(name = "image")
     private String productImage;
 
-    @Column(name = "product_name")
+    @Column(name = "name")
     private String productName;
 
-    @Column(name = "product_price")
+    @Column(name = "price")
     private double productPrice;
 
-    @Column(name = "product_rate")
+    @Column(name = "rate")
     private double productRate;
 
-    @Column(name = "product_description")
+    @Column(name = "description")
     private String productDescription;
 }
