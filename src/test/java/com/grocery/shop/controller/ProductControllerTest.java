@@ -1,7 +1,6 @@
 package com.grocery.shop.controller;
 
 import com.grocery.shop.dto.ProductDtoShort;
-import com.grocery.shop.service.ProductService;
 import com.grocery.shop.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

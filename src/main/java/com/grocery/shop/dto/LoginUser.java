@@ -1,22 +1,21 @@
 package com.grocery.shop.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-public class UserDto {
-
-    @NotBlank
+@NoArgsConstructor
+public class LoginUser {
     @Email
-    @Column(unique = true)
+    @NotBlank
     private String email;
 
     @NotBlank
