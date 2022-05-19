@@ -23,22 +23,22 @@ import javax.persistence.Table;
 public class Product {
 
     @Id
-    @Column(name = "id")
+    @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_generator")
-    private Long productId;
+    private Long id;
 
-    @Column(name = "image")
-    private String productImage;
+    @Column
+    private String image;
 
-    @Column(name = "name")
-    private String productName;
+    @Column
+    private String name;
 
-    @Column(name = "price")
-    private double productPrice;
+    @Column
+    private double price;
 
-    @Column(name = "rate")
-    private double productRate;
+    @Column
+    private double rate;
 
-    @Column(name = "description")
-    private String productDescription;
+    @Column
+    private String description;
 }

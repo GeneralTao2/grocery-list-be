@@ -44,7 +44,7 @@ class UserServiceImplTest {
         final User expectedUser = new User();
         expectedUser.setEmail(userDto.getEmail());
         expectedUser.setPassword(userDto.getPassword());
-        expectedUser.setRoles(Role.USER);
+        expectedUser.setRole(Role.USER);
 
         when(userRepository.existsByEmail(userDto.getEmail())).thenReturn(false);
         when(passwordEncoder.encode(userDto.getPassword())).thenReturn(anyString());
@@ -55,9 +55,9 @@ class UserServiceImplTest {
 
         final User actualUser = userArgumentCaptor.getValue();
 
-        SoftAssertions.assertSoftly(softly->{
+        SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(actualUser.getEmail()).isEqualTo(expectedUser.getEmail());
-            softly.assertThat(actualUser.getRoles()).isEqualTo(expectedUser.getRoles());
+            softly.assertThat(actualUser.getRole()).isEqualTo(expectedUser.getRole());
         });
     }
 
@@ -69,6 +69,6 @@ class UserServiceImplTest {
 
         when(userRepository.existsByEmail(userDto.getEmail())).thenReturn(true);
 
-        assertThatExceptionOfType(UserAlreadyExistsException.class).isThrownBy(()->userService.saveUser(userDto));
+        assertThatExceptionOfType(UserAlreadyExistsException.class).isThrownBy(() -> userService.saveUser(userDto));
     }
 }
