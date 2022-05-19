@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -20,6 +21,7 @@ public class LoginUser {
     private String email;
 
     @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9]*$")
     @Size(min = 5, max = 10)
     private String password;
 }
