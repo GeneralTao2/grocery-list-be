@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 // FOR MANUAL TESTS PURPOSE
 @Configuration
@@ -28,9 +29,10 @@ public class LoadDB {
             );
 
             List<Product> products = new ArrayList<>();
+            Random random = new Random();
             for (int i = 0; i < 100; i++) {
-                products.add(new Product(0L, "i" + i,
-                        "n" + i, 500.0 + i, 100.0 + i,
+                products.add(new Product(0L, "https//:someImgNo" + i,
+                        "name" + i, 500 + i, 1 + (5 - 1) * random.nextDouble(),
                         "d" + i));
             }
 
