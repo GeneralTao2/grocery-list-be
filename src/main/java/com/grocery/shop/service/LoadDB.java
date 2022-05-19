@@ -32,7 +32,7 @@ public class LoadDB {
             Random random = new Random();
             for (int i = 0; i < 100; i++) {
                 products.add(new Product(0L, "https//:someImgNo" + i,
-                        "name" + i, random.nextInt() + i, 1 + (5 - 1) * random.nextDouble(),
+                        "name" + i, 500 + i, 1 + (5 - 1) * random.nextDouble(),
                         "d" + i));
             }
 
