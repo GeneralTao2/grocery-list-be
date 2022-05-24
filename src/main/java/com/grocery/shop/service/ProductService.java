@@ -12,9 +12,9 @@ public interface ProductService {
 
     ProductDtoFull getProductDescriptionById(long id);
 
+    long getTotalPageNumber();
+
     List<ProductDtoShort> getMostPopularProducts();
 
     Page<ProductDtoShort> getPageWithProductsWithName(final String name, final int pageNumber);
-
-    long getTotalPageNumber();
 }
