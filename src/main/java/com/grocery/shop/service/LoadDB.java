@@ -2,6 +2,7 @@ package com.grocery.shop.service;
 
 import com.grocery.shop.model.Product;
 import com.grocery.shop.model.Role;
+import com.grocery.shop.model.Type;
 import com.grocery.shop.model.User;
 import com.grocery.shop.repository.ProductRepository;
 import com.grocery.shop.repository.UserRepository;
@@ -31,9 +32,9 @@ public class LoadDB {
             List<Product> products = new ArrayList<>();
             Random random = new Random();
             for (int i = 0; i < 100; i++) {
-                products.add(new Product(0L, "https//:someImgNo" + i,
-                        "name" + i, 500 + i, 1 + (5 - 1) * random.nextDouble(),
-                        "d" + i));
+                products.add(new Product(0L, "https//:someImg" +i+1,
+                        "name" + i+1, 500, 1 + (5 - 1) * random.nextDouble(),
+                        "d" + i, Type.WEIGHABLE, 4));
             }
 
             productRepository.saveAll(products);

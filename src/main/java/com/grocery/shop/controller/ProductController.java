@@ -1,5 +1,6 @@
 package com.grocery.shop.controller;
 
+import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
 import com.grocery.shop.service.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -26,4 +27,8 @@ public class ProductController {
         return productService.getPageWithProductsOnDashboard(page);
     }
 
+    @GetMapping(value = "/product/{id}")
+    public ProductDtoFull getProductDescriptionById(@PathVariable("id") long id) {
+        return productService.getProductDescriptionById(id);
+    }
 }

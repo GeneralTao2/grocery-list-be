@@ -1,0 +1,1 @@
+alter table products add type VARCHAR(20);

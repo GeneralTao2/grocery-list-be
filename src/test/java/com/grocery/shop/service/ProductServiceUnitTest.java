@@ -3,6 +3,7 @@ package com.grocery.shop.service;
 import com.grocery.shop.dto.ProductDtoShort;
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.model.Product;
+import com.grocery.shop.model.Type;
 import com.grocery.shop.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,10 +31,10 @@ class ProductServiceUnitTest {
     @Test
     void firstPageCannotContainMoreProductsThenRequested() {
         List<Product> productList = Arrays.asList(
-                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1"),
-                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2"),
-                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3"),
-                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4")
+                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1", Type.WEIGHABLE, 4),
+                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2", Type.WEIGHABLE, 5),
+                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3", Type.WEIGHABLE, 4),
+                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4", Type.WEIGHABLE, 3)
         );
 
         List<ProductDtoShort> expectedList = Arrays.asList(
@@ -51,10 +52,10 @@ class ProductServiceUnitTest {
     @Test
     void secondPageWillContainOneElementWhenOnlyFourProductsAndMaximumThreePerPage() {
         List<Product> productList = Arrays.asList(
-                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1"),
-                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2"),
-                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3"),
-                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4")
+                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1", Type.WEIGHABLE, 4),
+                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2", Type.WEIGHABLE, 4),
+                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3", Type.WEIGHABLE, 4),
+                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4", Type.WEIGHABLE, 4)
         );
 
         List<ProductDtoShort> expectedList = Collections.singletonList(
@@ -69,10 +70,10 @@ class ProductServiceUnitTest {
     @Test()
     void ThrowExceptionWhenTooHighOrTooLowValueWasRequested() {
         List<Product> productList = Arrays.asList(
-                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1"),
-                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2"),
-                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3"),
-                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4")
+                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1", Type.WEIGHABLE, 4),
+                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2", Type.WEIGHABLE, 4),
+                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3", Type.WEIGHABLE, 4),
+                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4", Type.WEIGHABLE, 4)
         );
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -87,7 +88,7 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < 50; i++) {
             productList.add(new Product(1L + i,
-                    "Source", "Name", 150., 1.5, "Description"));
+                    "Source", "Name", 150., 1.5, "Description", Type.WEIGHABLE, 5));
         }
 
         for (int i = 0; i < 40; i++) {
