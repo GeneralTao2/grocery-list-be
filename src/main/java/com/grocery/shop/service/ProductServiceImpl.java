@@ -87,4 +87,8 @@ public class ProductServiceImpl implements ProductService {
 
         return resultPage;
     }
+
+    public long getTotalPageNumber() {
+        return productRepository.count() / 40 + 1;
+    }
 }
