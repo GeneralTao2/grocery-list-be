@@ -31,4 +31,9 @@ public class ProductController {
     public ProductDtoFull getProductDescriptionById(@PathVariable("id") long id) {
         return productService.getProductDescriptionById(id);
     }
+
+    @GetMapping(value = "/totalPages")
+    public long getTotalPages() {
+        return productService.getTotalPageNumber();
+    }
 }

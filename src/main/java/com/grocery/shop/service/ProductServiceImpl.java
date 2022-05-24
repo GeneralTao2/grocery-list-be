@@ -39,4 +39,8 @@ public class ProductServiceImpl {
         public ProductDtoFull getProductDescriptionById(long id) {
         return ProductMapper.MAPPER.toDtoFull(productRepository.findById(id).get());
     }
+
+    public long getTotalPageNumber() {
+        return productRepository.count() / 40 + 1;
+    }
 }
