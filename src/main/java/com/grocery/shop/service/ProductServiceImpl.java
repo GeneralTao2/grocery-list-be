@@ -1,5 +1,6 @@
 package com.grocery.shop.service;
 
+import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;

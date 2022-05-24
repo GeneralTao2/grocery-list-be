@@ -44,4 +44,11 @@ public class Product {
 
     @Column
     private int countOfSoldProducts;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Type type;
+
+    @Column
+    private int size;
 }
