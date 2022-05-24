@@ -41,6 +41,6 @@ public class ProductServiceImpl {
     }
 
     public long getTotalPageNumber() {
-        return productRepository.count() / 40 + 1;
+        return productRepository.count() / 12 + 1;
     }
 }
