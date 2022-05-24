@@ -10,4 +10,6 @@ public interface ProductService {
     List<ProductDtoShort> getPageWithProductsOnDashboard(final int pageNumber);
 
     ProductDtoFull getProductDescriptionById(long id);
+
+    public long getTotalPageNumber();
 }
