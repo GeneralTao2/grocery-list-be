@@ -7,11 +7,10 @@ import lombok.Setter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
-
-@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
+@AllArgsConstructor
 public class JwtUserData {
     String email;
     List<SimpleGrantedAuthority> roles;
