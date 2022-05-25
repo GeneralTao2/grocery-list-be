@@ -7,4 +7,6 @@ import java.util.List;
 public interface ProductService {
 
     List<ProductDtoShort> getPageWithProductsOnDashboard(final int pageNumber);
+
+    List<ProductDtoShort> getMostPopularProducts();
 }
