@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login",
                         "/products",
                         "/products/page*",
+                        "/product/*",
                         "/register",
                         "/popular-products",
                         "/swagger-ui/**",
