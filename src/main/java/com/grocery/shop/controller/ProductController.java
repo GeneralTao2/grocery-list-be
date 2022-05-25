@@ -45,7 +45,7 @@ public class ProductController {
         return productService.getProductDescriptionById(id);
     }
 
-    @GetMapping(value = "/totalPages")
+    @GetMapping(value = "/total-Pages")
     public long getTotalPages() {
         return productService.getTotalPageNumber();
     }
