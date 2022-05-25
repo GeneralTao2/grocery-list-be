@@ -15,12 +15,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import static com.grocery.shop.security.JwtConstants.ACCESS_TOKEN_VALIDITY_SECONDS;
-import static com.grocery.shop.security.JwtConstants.SIGNING_KEY;
 
 @Component
 public class JwtTokenUtil implements Serializable {
+
+    private static final long serialVersionUID = 1628975668224637884L;
+
+    private final String SIGNING_KEY = "823dcb227a07d6d4b6b4f573a7bb75827597a17880b4e383b8f8b48a8dc0bab9";
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
