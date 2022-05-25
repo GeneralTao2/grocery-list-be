@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grocery.shop.dto.UserDto;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.service.UserService;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserRegistrationController.class)
-class UserRegistrationControllerTest {
+class UserRegistrationControllerTest extends SecurityContextMocking {
 
     private static final UserDto USER_DTO = new UserDto("johndoe@yahoo.com", "123456pass");
 
@@ -29,11 +30,7 @@ class UserRegistrationControllerTest {
     @MockBean
     private UserService userService;
 
-    // TODO: Tests with MVC dosnt works because of bean circle injection error
-    // form spring security side. Will be resolved after all PR merged
-    // @Disabled didn't disabled test for some reason so I commented @Test
-    // annotation.
-    //@Test
+    @Test
     void whenPostValidUserBody_ThenReturnCreatedResponse() throws Exception {
         doNothing().when(userService).saveUser(USER_DTO);
 
@@ -42,11 +39,7 @@ class UserRegistrationControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    // TODO: Tests with MVC dosnt works because of bean circle injection error
-    // form spring security side. Will be resolved after all PR merged
-    // @Disabled didn't disabled test for some reason so I commented @Test
-    // annotation.
-    //@Test
+    @Test
     void whenPostInvalidUserEmail_ThenReturnBadRequestResponse() throws Exception {
         final UserDto invalidUserDto = new UserDto();
         invalidUserDto.setEmail("abcdasf");
@@ -56,11 +49,7 @@ class UserRegistrationControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // TODO: Tests with MVC dosnt works because of bean circle injection error
-    // form spring security side. Will be resolved after all PR merged
-    // @Disabled didn't disabled test for some reason so I commented @Test
-    // annotation.
-    //@Test
+    @Test
     void whenPostInvalidUserPassword_ThenReturnBadRequestResponse() throws Exception {
         final UserDto invalidUserDto = new UserDto();
         invalidUserDto.setPassword("123");
@@ -70,11 +59,7 @@ class UserRegistrationControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // TODO: Tests with MVC dosnt works because of bean circle injection error
-    // form spring security side. Will be resolved after all PR merged
-    // @Disabled didn't disabled test for some reason so I commented @Test
-    // annotation.
-    //@Test
+    @Test
     void whenPostExistingUser_ThenThrowUserAlreadyExistsException() throws Exception {
         final UserDto existingUserDto = new UserDto(USER_DTO.getEmail(), "6789secret");
 

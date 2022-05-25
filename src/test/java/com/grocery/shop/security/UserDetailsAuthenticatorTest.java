@@ -11,12 +11,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
@@ -53,5 +55,7 @@ class UserDetailsAuthenticatorTest {
         when(userDetailsService.loadUserByUsername(jwtUserData.getEmail())).thenReturn(userDetails);
 
         userDetailsAuthenticator.authenticate(jwtUserData, request);
+
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNotNull();
     }
 }
