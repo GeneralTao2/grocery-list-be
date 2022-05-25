@@ -32,7 +32,7 @@ public class ProductController {
         return productService.getProductDescriptionById(id);
     }
 
-    @GetMapping(value = "/total-Pages")
+    @GetMapping(value = "/total-pages")
     public long getTotalPages() {
         return productService.getTotalPageNumber();
     }
