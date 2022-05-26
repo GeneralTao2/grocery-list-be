@@ -1,7 +1,9 @@
 package com.grocery.shop.service;
 
+import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
 import com.grocery.shop.exception.PageNotFoundException;
+import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.mapper.ProductMapper;
 import com.grocery.shop.model.Product;
@@ -58,12 +60,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDtoFull getProductDescriptionById(long id) {
+        return productRepository.findById(id).map(ProductMapper.MAPPER::toDtoFull).orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    @Override
+    public long getTotalPageNumber() {
+        return productRepository.count() != 0 ? productRepository.count() / 12 + 1 : 0;
+    }
+
+    @Override
     public Page<ProductDtoShort> getPageWithProductsWithName(String name, int pageNumber) {
         final int pageSize = 15;
 
-        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
 
-        if(isNull(name)){
+        if (isNull(name)) {
             return getProductPage(productRepository.findAll(pageable), pageable);
         }
 
@@ -72,18 +84,17 @@ public class ProductServiceImpl implements ProductService {
 
     private Page<ProductDtoShort> getProductPage(Page<Product> productPage, Pageable pageable) {
         List<ProductDtoShort> productDtoList = productPage.stream()
-                                                          .map(ProductMapper.MAPPER::toDTOShort)
-                                                          .collect(Collectors.toList());
+                .map(ProductMapper.MAPPER::toDTOShort)
+                .collect(Collectors.toList());
 
         Page<ProductDtoShort> resultPage = new PageImpl<>(productDtoList, pageable, productPage.getTotalElements());
 
-        if((pageable.getPageNumber() + 1 > resultPage.getTotalPages()) && pageable.getPageNumber() != 0){
+        if ((pageable.getPageNumber() + 1 > resultPage.getTotalPages()) && pageable.getPageNumber() != 0) {
             throw new PageNotFoundException("This page does not exist");
         }
-        if(productDtoList.isEmpty()){
+        if (productDtoList.isEmpty()) {
             throw new ProductsNotFoundException("Products not found for this name");
         }
-
         return resultPage;
     }
 }

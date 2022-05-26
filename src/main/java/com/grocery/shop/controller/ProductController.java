@@ -1,5 +1,6 @@
 package com.grocery.shop.controller;
 
+import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
 import com.grocery.shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,11 @@ public class ProductController {
         return productService.getPageWithProductsOnDashboard(page);
     }
 
+    @GetMapping(value = "/product/{id}")
+    public ProductDtoFull getProductDescriptionById(@PathVariable("id") long id) {
+        return productService.getProductDescriptionById(id);
+    }
+
     @GetMapping(value = "/popular-products")
     public List<ProductDtoShort> getMostPopularProducts() {
         return productService.getMostPopularProducts();
@@ -38,5 +44,10 @@ public class ProductController {
     public List<ProductDtoShort> getPageWithProductsFilteredByName(@PathVariable("name") final String name,
                                                                    @PathVariable("page") final int page){
         return productService.getPageWithProductsWithName(name, page).getContent();
+    }
+
+    @GetMapping(value = "/total-pages")
+    public long getTotalPages() {
+        return productService.getTotalPageNumber();
     }
 }
