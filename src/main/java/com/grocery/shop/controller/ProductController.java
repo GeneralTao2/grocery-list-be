@@ -32,6 +32,11 @@ public class ProductController {
         return productService.getProductDescriptionById(id);
     }
 
+    @GetMapping(value = "/popular-products")
+    public List<ProductDtoShort> getMostPopularProducts() {
+        return productService.getMostPopularProducts();
+    }
+
     @GetMapping(value = "/total-pages")
     public long getTotalPages() {
         return productService.getTotalPageNumber();
