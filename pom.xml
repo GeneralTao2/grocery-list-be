@@ -12,7 +12,7 @@
 
     <groupId>com.grocery.shop</groupId>
     <artifactId>spring_grocery_shop</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.3</version>
 
     <name>spring_grocery_shop</name>
     <description>spring_grocery_shop</description>
