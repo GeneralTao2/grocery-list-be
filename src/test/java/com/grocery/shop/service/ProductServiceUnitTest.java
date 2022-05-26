@@ -44,10 +44,10 @@ class ProductServiceUnitTest {
     @Test
     void firstPageCannotContainMoreProductsThenRequested() {
         List<Product> productList = Arrays.asList(
-                new Product(1L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
-                new Product(2L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
-                new Product(3L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
-                new Product(4L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3)
+                new Product(1L, "Source1", "Name1", 150., 1.5, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(2L, "Source2", "Name2", 250., 2.5, "desc2", 3, Type.WEIGHABLE, 3),
+                new Product(3L, "Source3", "Name3", 350., 3.5, "desc3", 3, Type.WEIGHABLE, 3),
+                new Product(4L, "Source4", "Name4", 450., 4.5, "desc4", 3, Type.WEIGHABLE, 3)
         );
 
         List<ProductDtoShort> expectedList = Arrays.asList(
@@ -65,10 +65,10 @@ class ProductServiceUnitTest {
     @Test
     void secondPageWillContainOneElementWhenOnlyFourProductsAndMaximumThreePerPage() {
         List<Product> productList = Arrays.asList(
-                new Product(1L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
-                new Product(2L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
-                new Product(3L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
-                new Product(4L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3)
+                new Product(1L, "Source1", "Name1", 150., 1.5, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(2L, "Source2", "Name2", 250., 2.5, "desc2", 3, Type.WEIGHABLE, 3),
+                new Product(3L, "Source3", "Name3", 350., 3.5, "desc3", 3, Type.WEIGHABLE, 3),
+                new Product(4L, "Source4", "Name4", 450., 4.5, "desc4", 3, Type.WEIGHABLE, 3)
         );
 
         List<ProductDtoShort> expectedList = Collections.singletonList(
@@ -136,7 +136,7 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < 20; i++) {
             productList.add(new Product(1L + i,
-                    "Source", "Name", 150., 1.5, "Description", 4, Type.WEIGHABLE, i));
+                    "Source", "Name", 150., 1.5, "Description", i, Type.WEIGHABLE, i));
         }
 
         for (int i = 19; i > 4; i--) {
