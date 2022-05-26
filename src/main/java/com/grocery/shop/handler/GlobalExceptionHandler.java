@@ -1,5 +1,6 @@
 package com.grocery.shop.handler;
 
+import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.exception.UserNotFoundException;
@@ -49,6 +50,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     protected void userNotFoundException() {
+
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProductNotFoundException.class)
+    protected void productNotFoundException() {
 
     }
 
