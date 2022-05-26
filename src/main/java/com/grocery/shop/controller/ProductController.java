@@ -28,4 +28,15 @@ public class ProductController {
     public List<ProductDtoShort> getMostPopularProducts() {
         return productService.getMostPopularProducts();
     }
+
+    @GetMapping(value = "/products/name={name}")
+    public List<ProductDtoShort> getPageWithProductsFilteredByName(@PathVariable("name") final String name) {
+        return productService.getPageWithProductsWithName(name, 1).getContent();
+    }
+
+    @GetMapping(value = "/products/name={name}/page={page}")
+    public List<ProductDtoShort> getPageWithProductsFilteredByName(@PathVariable("name") final String name,
+                                                                   @PathVariable("page") final int page){
+        return productService.getPageWithProductsWithName(name, page).getContent();
+    }
 }
