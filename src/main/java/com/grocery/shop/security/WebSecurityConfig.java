@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login",
                         "/products",
                         "/products/page*",
+                        "/products/name*",
                         "/product/*",
                         "/products/name*/page*",
                         "/total-pages",
