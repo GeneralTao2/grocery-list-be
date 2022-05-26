@@ -3,19 +3,28 @@ package com.grocery.shop.service;
 import com.grocery.shop.dto.ProductDtoShort;
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
+import com.grocery.shop.mapper.ProductMapper;
 import com.grocery.shop.model.Product;
 import com.grocery.shop.repository.ProductRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -141,5 +150,96 @@ class ProductServiceUnitTest {
     void getMostPopularProductsThrowsExceptionWhenNotEnoughMatchingProducts() {
         when(productRepository.findAll()).thenReturn(new ArrayList<>());
         assertThrows(ProductsNotFoundException.class, () -> productsService.getMostPopularProducts());
+    }
+
+    @Test
+    void getProductsByNameReturnsOnlyProductsWithRequestedName(){
+        final String productName = "Apple";
+        final List<Product> productList = Arrays.asList(
+                new Product(1L, "Source1", "Apple", 150., 1, "Description1", 1),
+                new Product(2L, "Source2", "Apple Juice", 350., 3.5, "Description2",3)
+        );
+        final List<ProductDtoShort> productDtoList = productList.stream()
+                                                                .map(ProductMapper.MAPPER::toDTOShort)
+                                                                .collect(Collectors.toList());
+
+        final Page<ProductDtoShort> expectedProductPage = new PageImpl<>(productDtoList);
+
+        when(productRepository.searchByName(eq(productName), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(productList));
+
+        final Page<ProductDtoShort> actualProductPage = productsService.getPageWithProductsWithName(productName, 1);
+
+        Assertions.assertThat(actualProductPage.getContent()).containsExactlyInAnyOrderElementsOf(expectedProductPage.getContent());
+    }
+
+    @Test
+    void getProductsByNameReturnsNoMoreThanFifteenProductsPerPage(){
+        final List<Product> productList = new ArrayList<>();
+        final List<ProductDtoShort> expectedList = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            productList.add(new Product(1L + i,
+                                        "Source", "Name", 150., 1.5, "Description", 2));
+        }
+
+        for (int i = 0; i < 15; i++) {
+            expectedList.add(new ProductDtoShort(1L + i,
+                                                 "Source", "Name", 150., 1.5));
+        }
+
+        when(productRepository.searchByName(eq("Name"), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(productList.subList(0,15)));
+
+        final List<ProductDtoShort> actualList = productsService.getPageWithProductsWithName("Name", 1)
+                                                                .getContent();
+
+        Assertions.assertThat(actualList).containsExactlyInAnyOrderElementsOf(expectedList);
+    }
+
+    @Test
+    void getProductsByNameThrowsExceptionForNonExistingPage(){
+        final String productName = "Apple";
+        final int pageNumber = 8;
+
+        when(productRepository.searchByName(any(String.class), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of()));
+
+        assertThatExceptionOfType(PageNotFoundException.class)
+                .isThrownBy(() -> productsService.getPageWithProductsWithName(productName, pageNumber));
+    }
+
+    @Test
+    void getProductsByNameThrowsExceptionForNonExistingProductName(){
+        final String productName = "absent";
+
+        final Page<Product> emptyPage = new PageImpl<>(List.of());
+
+        when(productRepository.searchByName(eq(productName), any(Pageable.class)))
+                .thenReturn(emptyPage);
+
+        assertThatExceptionOfType(ProductsNotFoundException.class)
+                .isThrownBy(() -> productsService.getPageWithProductsWithName(productName, 1));
+    }
+
+    @Test
+    void getProductsByNameReturnsDefaultProductPageForNullName(){
+        final List<Product> productList = Arrays.asList(
+                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1",2),
+                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2",3),
+                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3",3),
+                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4",5)
+        );
+        final List<ProductDtoShort> productDtoList = productList.stream()
+                                                                .map(ProductMapper.MAPPER::toDTOShort)
+                                                                .collect(Collectors.toList());
+
+        final Page<ProductDtoShort> expectedProductPage = new PageImpl<>(productDtoList);
+
+        when(productRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(productList));
+
+        final Page<ProductDtoShort> actualProductPage = productsService.getPageWithProductsWithName(null, 1);
+
+        Assertions.assertThat(actualProductPage.getContent()).containsExactlyInAnyOrderElementsOf(expectedProductPage.getContent());
     }
 }

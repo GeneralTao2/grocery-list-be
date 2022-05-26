@@ -7,11 +7,17 @@ import com.grocery.shop.mapper.ProductMapper;
 import com.grocery.shop.model.Product;
 import com.grocery.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +55,35 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductsNotFoundException("Not enough products");
         }
         return mostPopularProducts;
+    }
+
+    @Override
+    public Page<ProductDtoShort> getPageWithProductsWithName(String name, int pageNumber) {
+        final int pageSize = 15;
+
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+
+        if(isNull(name)){
+            return getProductPage(productRepository.findAll(pageable), pageable);
+        }
+
+        return getProductPage(productRepository.searchByName(name, pageable), pageable);
+    }
+
+    private Page<ProductDtoShort> getProductPage(Page<Product> productPage, Pageable pageable) {
+        List<ProductDtoShort> productDtoList = productPage.stream()
+                                                          .map(ProductMapper.MAPPER::toDTOShort)
+                                                          .collect(Collectors.toList());
+
+        Page<ProductDtoShort> resultPage = new PageImpl<>(productDtoList, pageable, productPage.getTotalElements());
+
+        if((pageable.getPageNumber() + 1 > resultPage.getTotalPages()) && pageable.getPageNumber() != 0){
+            throw new PageNotFoundException("This page does not exist");
+        }
+        if(productDtoList.isEmpty()){
+            throw new ProductsNotFoundException("Products not found for this name");
+        }
+
+        return resultPage;
     }
 }
