@@ -1,5 +1,6 @@
 package com.grocery.shop.handler;
 
+import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> onException(Exception exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(exception.getMessage(), 500));
+    }
+
+    @ExceptionHandler(ProductsNotFoundException.class)
+    public ResponseEntity<ErrorResponse> onProductsNotFound(Exception e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(e.getMessage(), 404));
     }
 
     @Value

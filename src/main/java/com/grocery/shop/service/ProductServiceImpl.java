@@ -1,20 +1,21 @@
 package com.grocery.shop.service;
 
-import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
 import com.grocery.shop.exception.PageNotFoundException;
+import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.mapper.ProductMapper;
 import com.grocery.shop.model.Product;
 import com.grocery.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
@@ -32,15 +33,21 @@ public class ProductServiceImpl {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<ProductDtoShort> getPageWithProductsOnDashboard(final int pageNumber) {
         return getPage(productRepository.findAll(), 40, pageNumber);
     }
 
-        public ProductDtoFull getProductDescriptionById(long id) {
-        return ProductMapper.MAPPER.toDtoFull(productRepository.findById(id).get());
-    }
-
-    public long getTotalPageNumber() {
-        return productRepository.count() / 40 + 1;
+    @Override
+    public List<ProductDtoShort> getMostPopularProducts() {
+        List<ProductDtoShort> mostPopularProducts = productRepository.findAll().stream()
+                .sorted(Comparator.comparingInt(Product::getCountOfSoldProducts).reversed())
+                .limit(15)
+                .map(ProductMapper.MAPPER::toDTOShort)
+                .collect(Collectors.toList());
+        if (mostPopularProducts.isEmpty()) {
+            throw new ProductsNotFoundException("Not enough products");
+        }
+        return mostPopularProducts;
     }
 }

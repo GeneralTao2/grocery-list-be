@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,5 +71,21 @@ class ProductControllerTest {
         List<ProductDtoShort> resultListWithPage = productController.getPageWithProducts(2);
 
         assertEquals(3, resultListWithPage.size());
+    }
+
+    @Test
+    void getMostPopularProductsTest() {
+        List<ProductDtoShort> productList = Arrays.asList(
+                mock(ProductDtoShort.class),
+                mock(ProductDtoShort.class),
+                mock(ProductDtoShort.class),
+                mock(ProductDtoShort.class)
+        );
+
+        when(productService.getMostPopularProducts()).thenReturn(productList);
+
+        List<ProductDtoShort> resultList = productController.getMostPopularProducts();
+
+        assertEquals(4, resultList.size());
     }
 }
