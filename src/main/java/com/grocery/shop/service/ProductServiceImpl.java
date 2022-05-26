@@ -3,6 +3,7 @@ package com.grocery.shop.service;
 import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
 import com.grocery.shop.exception.PageNotFoundException;
+import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.mapper.ProductMapper;
 import com.grocery.shop.model.Product;
@@ -60,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDtoFull getProductDescriptionById(long id) {
-        return productRepository.findById(id).map(ProductMapper.MAPPER::toDtoFull).orElseThrow();
+        return productRepository.findById(id).map(ProductMapper.MAPPER::toDtoFull).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @Override
