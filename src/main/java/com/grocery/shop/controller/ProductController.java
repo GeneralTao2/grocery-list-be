@@ -25,6 +25,11 @@ public class ProductController {
         return productService.getPageWithProductsOnDashboard(page);
     }
 
+    @GetMapping(value = "/product/{id}")
+    public ProductDtoFull getProductDescriptionById(@PathVariable("id") long id) {
+        return productService.getProductDescriptionById(id);
+    }
+
     @GetMapping(value = "/popular-products")
     public List<ProductDtoShort> getMostPopularProducts() {
         return productService.getMostPopularProducts();
@@ -39,15 +44,6 @@ public class ProductController {
     public List<ProductDtoShort> getPageWithProductsFilteredByName(@PathVariable("name") final String name,
                                                                    @PathVariable("page") final int page){
         return productService.getPageWithProductsWithName(name, page).getContent();
-    }
-    @GetMapping(value = "/product/{id}")
-    public ProductDtoFull getProductDescriptionById(@PathVariable("id") long id) {
-        return productService.getProductDescriptionById(id);
-    }
-
-    @GetMapping(value = "/popular-products")
-    public List<ProductDtoShort> getMostPopularProducts() {
-        return productService.getMostPopularProducts();
     }
 
     @GetMapping(value = "/total-pages")

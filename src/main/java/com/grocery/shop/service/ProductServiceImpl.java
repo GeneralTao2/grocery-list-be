@@ -59,6 +59,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDtoFull getProductDescriptionById(long id) {
+        return productRepository.findById(id).map(ProductMapper.MAPPER::toDtoFull).orElseThrow();
+    }
+
+    @Override
+    public long getTotalPageNumber() {
+        return productRepository.count() != 0 ? productRepository.count() / 12 + 1 : 0;
+    }
+
+    @Override
     public Page<ProductDtoShort> getPageWithProductsWithName(String name, int pageNumber) {
         final int pageSize = 15;
 

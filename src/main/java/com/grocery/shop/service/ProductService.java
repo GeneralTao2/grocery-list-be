@@ -17,7 +17,4 @@ public interface ProductService {
     List<ProductDtoShort> getMostPopularProducts();
 
     Page<ProductDtoShort> getPageWithProductsWithName(final String name, final int pageNumber);
-
-    public ProductDtoFull getProductDescriptionById(long id);
-
 }
