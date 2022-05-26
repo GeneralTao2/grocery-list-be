@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,10 +44,10 @@ class ProductServiceUnitTest {
     @Test
     void firstPageCannotContainMoreProductsThenRequested() {
         List<Product> productList = Arrays.asList(
-                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1", Type.WEIGHABLE, 4),
-                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2", Type.WEIGHABLE, 5),
-                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3", Type.WEIGHABLE, 4),
-                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4", Type.WEIGHABLE, 3)
+                new Product(1L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(2L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(3L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(4L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3)
         );
 
         List<ProductDtoShort> expectedList = Arrays.asList(
@@ -64,10 +65,10 @@ class ProductServiceUnitTest {
     @Test
     void secondPageWillContainOneElementWhenOnlyFourProductsAndMaximumThreePerPage() {
         List<Product> productList = Arrays.asList(
-                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1", Type.WEIGHABLE, 4),
-                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2", Type.WEIGHABLE, 4),
-                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3", Type.WEIGHABLE, 4),
-                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4", Type.WEIGHABLE, 4)
+                new Product(1L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(2L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(3L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(4L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3)
         );
 
         List<ProductDtoShort> expectedList = Collections.singletonList(
@@ -83,10 +84,10 @@ class ProductServiceUnitTest {
     @Test()
     void ThrowExceptionWhenTooHighOrTooLowValueWasRequested() {
         List<Product> productList = Arrays.asList(
-                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1", Type.WEIGHABLE, 4),
-                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2", Type.WEIGHABLE, 4),
-                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3", Type.WEIGHABLE, 4),
-                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4", Type.WEIGHABLE, 4)
+                new Product(1L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(2L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(3L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(4L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3)
         );
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -101,7 +102,7 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < 50; i++) {
             productList.add(new Product(1L + i,
-                    "Source", "Name", 150., 1.5, "Description", Type.WEIGHABLE, 5));
+                    "Source", "Name", 150., 1.5, "Description", 3, Type.WEIGHABLE, 3));
         }
 
         for (int i = 0; i < 40; i++) {
@@ -121,7 +122,7 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < 20; i++) {
             productList.add(new Product(1L + i,
-                    "Source", "Name", 150., 1.5, "Description", i));
+                    "Source", "Name", 150., 1.5, "Description", 3, Type.WEIGHABLE, i));
         }
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -135,7 +136,7 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < 20; i++) {
             productList.add(new Product(1L + i,
-                    "Source", "Name", 150., 1.5, "Description", i));
+                    "Source", "Name", 150., 1.5, "Description", 4, Type.WEIGHABLE, i));
         }
 
         for (int i = 19; i > 4; i--) {
@@ -154,15 +155,15 @@ class ProductServiceUnitTest {
     }
 
     @Test
-    void getProductsByNameReturnsOnlyProductsWithRequestedName(){
+    void getProductsByNameReturnsOnlyProductsWithRequestedName() {
         final String productName = "Apple";
         final List<Product> productList = Arrays.asList(
-                new Product(1L, "Source1", "Apple", 150., 1, "Description1", 1),
-                new Product(2L, "Source2", "Apple Juice", 350., 3.5, "Description2",3)
+                new Product(1L, "Source1", "Apple", 150., 1, "Description1", 4, Type.WEIGHABLE, 1),
+                new Product(2L, "Source2", "Apple Juice", 350., 3.5, "Description2", 3, Type.WEIGHABLE, 4)
         );
         final List<ProductDtoShort> productDtoList = productList.stream()
-                                                                .map(ProductMapper.MAPPER::toDTOShort)
-                                                                .collect(Collectors.toList());
+                .map(ProductMapper.MAPPER::toDTOShort)
+                .collect(Collectors.toList());
 
         final Page<ProductDtoShort> expectedProductPage = new PageImpl<>(productDtoList);
 
@@ -175,31 +176,31 @@ class ProductServiceUnitTest {
     }
 
     @Test
-    void getProductsByNameReturnsNoMoreThanFifteenProductsPerPage(){
+    void getProductsByNameReturnsNoMoreThanFifteenProductsPerPage() {
         final List<Product> productList = new ArrayList<>();
         final List<ProductDtoShort> expectedList = new ArrayList<>();
 
         for (int i = 0; i < 20; i++) {
             productList.add(new Product(1L + i,
-                                        "Source", "Name", 150., 1.5, "Description", 2));
+                    "Source", "Name", 150., 1.5, "Description", 2, Type.WEIGHABLE, 5));
         }
 
         for (int i = 0; i < 15; i++) {
             expectedList.add(new ProductDtoShort(1L + i,
-                                                 "Source", "Name", 150., 1.5));
+                    "Source", "Name", 150., 1.5));
         }
 
         when(productRepository.searchByName(eq("Name"), any(Pageable.class)))
-                .thenReturn(new PageImpl<>(productList.subList(0,15)));
+                .thenReturn(new PageImpl<>(productList.subList(0, 15)));
 
         final List<ProductDtoShort> actualList = productsService.getPageWithProductsWithName("Name", 1)
-                                                                .getContent();
+                .getContent();
 
         Assertions.assertThat(actualList).containsExactlyInAnyOrderElementsOf(expectedList);
     }
 
     @Test
-    void getProductsByNameThrowsExceptionForNonExistingPage(){
+    void getProductsByNameThrowsExceptionForNonExistingPage() {
         final String productName = "Apple";
         final int pageNumber = 8;
 
@@ -211,7 +212,7 @@ class ProductServiceUnitTest {
     }
 
     @Test
-    void getProductsByNameThrowsExceptionForNonExistingProductName(){
+    void getProductsByNameThrowsExceptionForNonExistingProductName() {
         final String productName = "absent";
 
         final Page<Product> emptyPage = new PageImpl<>(List.of());
@@ -224,16 +225,16 @@ class ProductServiceUnitTest {
     }
 
     @Test
-    void getProductsByNameReturnsDefaultProductPageForNullName(){
+    void getProductsByNameReturnsDefaultProductPageForNullName() {
         final List<Product> productList = Arrays.asList(
-                new Product(1L, "Source1", "Name1", 150., 1.5, "Description1",2),
-                new Product(2L, "Source2", "Name2", 250., 2.5, "Description2",3),
-                new Product(3L, "Source3", "Name3", 350., 3.5, "Description3",3),
-                new Product(4L, "Source4", "Name4", 450., 4.5, "Description4",5)
+                new Product(1L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(2L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(3L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3),
+                new Product(4L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3)
         );
         final List<ProductDtoShort> productDtoList = productList.stream()
-                                                                .map(ProductMapper.MAPPER::toDTOShort)
-                                                                .collect(Collectors.toList());
+                .map(ProductMapper.MAPPER::toDTOShort)
+                .collect(Collectors.toList());
 
         final Page<ProductDtoShort> expectedProductPage = new PageImpl<>(productDtoList);
 
