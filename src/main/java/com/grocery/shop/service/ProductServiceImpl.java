@@ -52,10 +52,12 @@ public class ProductServiceImpl implements ProductService {
         return mostPopularProducts;
     }
 
+    @Override
     public ProductDtoFull getProductDescriptionById(long id) {
         return productRepository.findById(id).map(ProductMapper.MAPPER::toDtoFull).orElseThrow();
     }
 
+    @Override
     public long getTotalPageNumber() {
         return productRepository.count() != 0 ? productRepository.count() / 12 + 1 : 0;
     }
