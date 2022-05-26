@@ -86,13 +86,25 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return resultPage;
+    @Override
+    public List<ProductDtoShort> getMostPopularProducts() {
+        List<ProductDtoShort> mostPopularProducts = productRepository.findAll().stream()
+                .sorted(Comparator.comparingInt(Product::getCountOfSoldProducts).reversed())
+                .limit(15)
+                .map(ProductMapper.MAPPER::toDTOShort)
+                .collect(Collectors.toList());
+        if (mostPopularProducts.isEmpty()) {
+            throw new ProductsNotFoundException("Not enough products");
+        }
+        return mostPopularProducts;
+    }
+
+    public ProductDtoFull getProductDescriptionById(long id) {
+        return productRepository.findById(id).map(ProductMapper.MAPPER::toDtoFull).orElseThrow();
     }
 
     public long getTotalPageNumber() {
-        return productRepository.count() / 40 + 1;
+        return productRepository.count() != 0 ? productRepository.count() / 12 + 1 : 0;
     }
 
-    public long getTotalPageNumber() {
-        return productRepository.count() / 40 + 1;
-    }
 }
