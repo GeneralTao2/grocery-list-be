@@ -96,25 +96,30 @@ class ProductServiceUnitTest {
     }
 
     @Test
-    void returnsNoMoreThanFortyProductsPerPage() {
+    void returnsNoMoreThan12ProductsPerPage() {
         List<Product> productList = new ArrayList<>();
         List<ProductDtoShort> expectedList = new ArrayList<>();
+        final int expectedPageSize = 12;
+        final int productQuantity = 50;
 
-        for (int i = 0; i < 50; i++) {
+
+        for (int i = 0; i < productQuantity; i++) {
             productList.add(new Product(1L + i,
                     "Source", "Name", 150., 1.5, "Description", 3, Type.WEIGHABLE, 3));
         }
 
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < expectedPageSize; i++) {
             expectedList.add(new ProductDtoShort(1L + i,
                     "Source", "Name", 150., 1.5));
         }
 
         when(productRepository.findAll()).thenReturn(productList);
+
         List<ProductDtoShort> firstPage = productsService.getPageWithProductsOnDashboard(1);
 
         assertThat(firstPage).isEqualTo(expectedList);
     }
+
 
     @Test
     void getMostPopularProductsReturnsNoMoreThan15Products() {

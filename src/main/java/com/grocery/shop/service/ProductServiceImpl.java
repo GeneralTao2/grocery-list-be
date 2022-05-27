@@ -25,6 +25,8 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    private static final int PAGE_SIZE = 12;
+
     private final ProductRepository productRepository;
 
     List<ProductDtoShort> getPage(final List<Product> productList, final int resultsPerPage, final int pageNumber) {
@@ -43,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDtoShort> getPageWithProductsOnDashboard(final int pageNumber) {
-        return getPage(productRepository.findAll(), 40, pageNumber);
+        return getPage(productRepository.findAll(), PAGE_SIZE, pageNumber);
     }
 
     @Override
