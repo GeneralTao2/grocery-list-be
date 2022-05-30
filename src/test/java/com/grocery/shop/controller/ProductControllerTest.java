@@ -1,6 +1,7 @@
 package com.grocery.shop.controller;
 
 import com.grocery.shop.dto.ProductDtoShort;
+import com.grocery.shop.model.ProductCategory;
 import com.grocery.shop.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,10 +12,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -74,6 +77,46 @@ class ProductControllerTest {
         List<ProductDtoShort> resultListWithPage = productController.getPageWithProducts(2);
 
         assertEquals(3, resultListWithPage.size());
+    }
+
+    @Test
+    void getProductsByCategory() {
+        ProductDtoShort product1 = mock(ProductDtoShort.class);
+        ProductDtoShort product2 = mock(ProductDtoShort.class);
+        ProductDtoShort product3 = mock(ProductDtoShort.class);
+
+        List<ProductDtoShort> productList = new ArrayList<>();
+        productList.add(product1);
+        productList.add(product2);
+        productList.add(product3);
+
+        when(productService.getProductsListByCategory(Mockito.any(ProductCategory.class),Mockito.any(Integer.class)))
+                .thenReturn(productList);
+
+        ResponseEntity<List<ProductDtoShort>> resultList = productController.getPageWithProductsByCategory(ProductCategory.FRUITS);
+
+        assertEquals(3, Objects.requireNonNull(resultList.getBody()).size());
+        assertFalse((resultList.getBody().size() == 2));
+        Mockito.verify(productService).getProductsListByCategory(Mockito.any(ProductCategory.class),Mockito.any(Integer.class));
+    }
+
+    @Test
+    void getProductsWithPageByCategory() {
+        ProductDtoShort product1 = mock(ProductDtoShort.class);
+        ProductDtoShort product2 = mock(ProductDtoShort.class);
+        ProductDtoShort product3 = mock(ProductDtoShort.class);
+
+        List<ProductDtoShort> productList = new ArrayList<>();
+        productList.add(product1);
+        productList.add(product2);
+        productList.add(product3);
+
+        when(productService.getProductsListByCategory(Mockito.any(ProductCategory.class),Mockito.any(Integer.class)))
+                .thenReturn(productList);
+
+        ResponseEntity<List<ProductDtoShort>> resultListWithPage = productController.getPageWithProductsByCategoryWithPage(ProductCategory.FRUITS,2);
+
+        assertEquals(3, Objects.requireNonNull(resultListWithPage.getBody()).size());
     }
 
     @Test

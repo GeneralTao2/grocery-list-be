@@ -22,7 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 () -> new UsernameNotFoundException("Could not find user")
         );
 
-
         return new UserDetailsImpl(user);
     }
 
