@@ -12,7 +12,7 @@
 
     <groupId>com.grocery.shop</groupId>
     <artifactId>spring_grocery_shop</artifactId>
-    <version>1.0.9</version>
+    <version>1.0.10</version>
 
     <name>spring_grocery_shop</name>
     <description>spring_grocery_shop</description>
@@ -24,9 +24,6 @@
         <assertj.version>3.22.0</assertj.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
         <mockito.version>4.4.0</mockito.version>
-        <flyway-db.user>postgres</flyway-db.user>
-        <flyway-db.password>postgres</flyway-db.password>
-        <flyway-db.url>jdbc:postgresql://localhost:5432/grocery_shop</flyway-db.url>
     </properties>
 
     <dependencies>
@@ -138,6 +135,12 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>8.5.11</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -188,9 +191,9 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <configuration>
-                    <url>${flyway-db.url}</url>
-                    <user>${flyway-db.user}</user>
-                    <password>${flyway-db.password}</password>
+                    <configFiles>
+                        <configFile>flyway.conf</configFile>
+                    </configFiles>
                 </configuration>
             </plugin>
         </plugins>
