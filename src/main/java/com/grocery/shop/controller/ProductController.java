@@ -2,8 +2,11 @@ package com.grocery.shop.controller;
 
 import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
+import com.grocery.shop.model.ProductCategory;
 import com.grocery.shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +33,11 @@ public class ProductController {
         return productService.getProductDescriptionById(id);
     }
 
+    @GetMapping(value = "/products/category={category}")
+    public ResponseEntity<List<ProductDtoShort>> getPageWithProductsByCategory(@PathVariable("category") final ProductCategory category) {
+        return new ResponseEntity<>(productService.getProductsListByCategory(category, 1), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/popular-products")
     public List<ProductDtoShort> getMostPopularProducts() {
         return productService.getMostPopularProducts();
@@ -49,5 +57,11 @@ public class ProductController {
     @GetMapping(value = "/total-pages")
     public long getTotalPages() {
         return productService.getTotalPageNumber();
+    }
+
+    @GetMapping(value = "/products/category={category}/page={page}")
+    public ResponseEntity<List<ProductDtoShort>> getPageWithProductsByCategoryWithPage(
+            @PathVariable("category") final ProductCategory category, @PathVariable("page") final int page) {
+        return new ResponseEntity<>(productService.getProductsListByCategory(category, page), HttpStatus.OK);
     }
 }

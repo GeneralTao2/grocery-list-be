@@ -2,6 +2,7 @@ package com.grocery.shop.handler;
 
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductNotFoundException;
+import com.grocery.shop.exception.ProductCategoryNotFound;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.exception.UserNotFoundException;
@@ -33,6 +34,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> onException(Exception exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(exception.getMessage(), 500));
+    }
+
+    @ExceptionHandler(ProductCategoryNotFound.class)
+    public ResponseEntity<ErrorResponse> whenCategoryDoesNotExists(ProductCategoryNotFound productCategoryNotFound) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(productCategoryNotFound.getMessage(), 404));
     }
 
     @ExceptionHandler(ProductsNotFoundException.class)

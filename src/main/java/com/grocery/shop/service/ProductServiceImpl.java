@@ -7,6 +7,7 @@ import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.mapper.ProductMapper;
 import com.grocery.shop.model.Product;
+import com.grocery.shop.model.ProductCategory;
 import com.grocery.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,6 +47,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDtoShort> getPageWithProductsOnDashboard(final int pageNumber) {
         return getPage(productRepository.findAll(), PAGE_SIZE, pageNumber);
+    }
+
+    @Override
+    public List<ProductDtoShort> getProductsListByCategory(ProductCategory productCategory, final int pageNumber) {
+        return getPage(productRepository.findAllByCategory(productCategory), PAGE_SIZE,  pageNumber);
     }
 
     @Override

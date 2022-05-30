@@ -1,5 +1,6 @@
 package com.grocery.shop.dto;
 
+import com.grocery.shop.model.ProductCategory;
 import com.grocery.shop.model.Type;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class ProductDtoFull {
     private double price;
     private double rate;
     private String description;
+    private ProductCategory productCategory;
     private Type type;
     private int size;
 }
