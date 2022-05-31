@@ -2,6 +2,7 @@ package com.grocery.shop.controller;
 
 import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
+import com.grocery.shop.dto.ProductResponse;
 import com.grocery.shop.model.ProductCategory;
 import com.grocery.shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,12 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping(value = "/products")
-    public List<ProductDtoShort> getPageWithProducts() {
+    public ProductResponse getPageWithProducts() {
         return productService.getPageWithProductsOnDashboard(1);
     }
 
     @GetMapping(value = "/products/page={page}")
-    public List<ProductDtoShort> getPageWithProducts(@PathVariable("page") final int page) {
+    public ProductResponse getPageWithProducts(@PathVariable("page") final int page) {
         return productService.getPageWithProductsOnDashboard(page);
     }
 
@@ -34,7 +35,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/products/category={category}")
-    public ResponseEntity<List<ProductDtoShort>> getPageWithProductsByCategory(@PathVariable("category") final ProductCategory category) {
+    public ResponseEntity<ProductResponse> getPageWithProductsByCategory(@PathVariable("category") final ProductCategory category) {
         return new ResponseEntity<>(productService.getProductsListByCategory(category, 1), HttpStatus.OK);
     }
 
@@ -54,13 +55,8 @@ public class ProductController {
         return productService.getPageWithProductsWithName(name, page).getContent();
     }
 
-    @GetMapping(value = "/total-pages")
-    public long getTotalPages() {
-        return productService.getTotalPageNumber();
-    }
-
     @GetMapping(value = "/products/category={category}/page={page}")
-    public ResponseEntity<List<ProductDtoShort>> getPageWithProductsByCategoryWithPage(
+    public ResponseEntity<ProductResponse> getPageWithProductsByCategoryWithPage(
             @PathVariable("category") final ProductCategory category, @PathVariable("page") final int page) {
         return new ResponseEntity<>(productService.getProductsListByCategory(category, page), HttpStatus.OK);
     }
