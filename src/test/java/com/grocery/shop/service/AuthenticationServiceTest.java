@@ -44,7 +44,7 @@ class AuthenticationServiceTest {
         String email = "u@uu.uu";
         LoginUser loginUser = new LoginUser(email, "123456");
         Role role = Role.USER;
-        User user = new User(email,"is not important", role);
+        User user = new User(email,"123456", role);
         String token = jwtTokenUtil.generateToken(user);
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));

@@ -2,6 +2,7 @@ package com.grocery.shop.service;
 
 import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
+import com.grocery.shop.dto.ProductResponse;
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
@@ -30,28 +31,35 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    List<ProductDtoShort> getPage(final List<Product> productList, final int resultsPerPage, final int pageNumber) {
+    ProductResponse getPage(final List<Product> productList, final int resultsPerPage, final int pageNumber) {
         int lastPossiblePage = (int) Math.ceil(((double) productList.size()) / resultsPerPage);
         if (pageNumber < 1 || pageNumber > lastPossiblePage) {
             throw new PageNotFoundException("This page does not exist");
         }
         int skipCount = (pageNumber - 1) * resultsPerPage;
 
-        return productList.stream()
+        ProductResponse productResponse = new ProductResponse();
+
+        productResponse.setProductDtoShort(productList.stream()
                 .skip(skipCount)
                 .limit(resultsPerPage)
                 .map(ProductMapper.MAPPER::toDTOShort)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+
+        productResponse.setNumberOfPages(productList.size() != 0 ? productList.size() / 12 + 1 : 0);
+        productResponse.setNumberOfElements(productList.size());
+
+        return productResponse;
     }
 
     @Override
-    public List<ProductDtoShort> getPageWithProductsOnDashboard(final int pageNumber) {
+    public ProductResponse getPageWithProductsOnDashboard(final int pageNumber) {
         return getPage(productRepository.findAll(), PAGE_SIZE, pageNumber);
     }
 
     @Override
-    public List<ProductDtoShort> getProductsListByCategory(ProductCategory productCategory, final int pageNumber) {
-        return getPage(productRepository.findAllByCategory(productCategory), PAGE_SIZE,  pageNumber);
+    public ProductResponse getProductsListByCategory(ProductCategory productCategory, final int pageNumber) {
+        return getPage(productRepository.findAllByCategory(productCategory), PAGE_SIZE, pageNumber);
     }
 
     @Override
@@ -70,11 +78,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDtoFull getProductDescriptionById(long id) {
         return productRepository.findById(id).map(ProductMapper.MAPPER::toDtoFull).orElseThrow(() -> new ProductNotFoundException(id));
-    }
-
-    @Override
-    public long getTotalPageNumber() {
-        return productRepository.count() != 0 ? productRepository.count() / 12 + 1 : 0;
     }
 
     @Override

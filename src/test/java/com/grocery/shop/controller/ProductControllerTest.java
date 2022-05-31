@@ -1,6 +1,7 @@
 package com.grocery.shop.controller;
 
 import com.grocery.shop.dto.ProductDtoShort;
+import com.grocery.shop.dto.ProductResponse;
 import com.grocery.shop.model.ProductCategory;
 import com.grocery.shop.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,13 +51,17 @@ class ProductControllerTest {
         productList.add(product2);
         productList.add(product3);
 
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProductDtoShort(productList);
+
         when(productService.getPageWithProductsOnDashboard(Mockito.any(Integer.class)))
-                .thenReturn(productList);
+                .thenReturn(productResponse);
 
-        List<ProductDtoShort> resultList = productController.getPageWithProducts();
+        ProductResponse returnResponse = productController.getPageWithProducts();
+        returnResponse.setNumberOfElements(productList.size());
 
-        assertEquals(3, resultList.size());
-        assertFalse((resultList.size() == 2));
+        assertEquals(3, returnResponse.getNumberOfElements());
+        assertFalse((returnResponse.getNumberOfElements() == 2));
         Mockito.verify(productService).getPageWithProductsOnDashboard(Mockito.any(Integer.class));
     }
 
@@ -71,12 +76,16 @@ class ProductControllerTest {
         productList.add(product2);
         productList.add(product3);
 
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProductDtoShort(productList);
+
         when(productService.getPageWithProductsOnDashboard(Mockito.any(Integer.class)))
-                .thenReturn(productList);
+                .thenReturn(productResponse);
 
-        List<ProductDtoShort> resultListWithPage = productController.getPageWithProducts(2);
+        ProductResponse resultResponse = productController.getPageWithProducts(2);
+        resultResponse.setNumberOfElements(productList.size());
 
-        assertEquals(3, resultListWithPage.size());
+        assertEquals(3, resultResponse.getNumberOfElements());
     }
 
     @Test
@@ -90,13 +99,17 @@ class ProductControllerTest {
         productList.add(product2);
         productList.add(product3);
 
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProductDtoShort(productList);
+
         when(productService.getProductsListByCategory(Mockito.any(ProductCategory.class),Mockito.any(Integer.class)))
-                .thenReturn(productList);
+                .thenReturn(productResponse);
 
-        ResponseEntity<List<ProductDtoShort>> resultList = productController.getPageWithProductsByCategory(ProductCategory.FRUITS);
+        ResponseEntity<ProductResponse> resultResponse = productController.getPageWithProductsByCategory(ProductCategory.FRUITS);
+        resultResponse.getBody().setNumberOfElements(productList.size());
 
-        assertEquals(3, Objects.requireNonNull(resultList.getBody()).size());
-        assertFalse((resultList.getBody().size() == 2));
+        assertEquals(3, Objects.requireNonNull(resultResponse.getBody()).getNumberOfElements());
+        assertFalse((resultResponse.getBody().getNumberOfElements() == 2));
         Mockito.verify(productService).getProductsListByCategory(Mockito.any(ProductCategory.class),Mockito.any(Integer.class));
     }
 
@@ -111,12 +124,16 @@ class ProductControllerTest {
         productList.add(product2);
         productList.add(product3);
 
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProductDtoShort(productList);
+
         when(productService.getProductsListByCategory(Mockito.any(ProductCategory.class),Mockito.any(Integer.class)))
-                .thenReturn(productList);
+                .thenReturn(productResponse);
 
-        ResponseEntity<List<ProductDtoShort>> resultListWithPage = productController.getPageWithProductsByCategoryWithPage(ProductCategory.FRUITS,2);
+        ResponseEntity<ProductResponse> resultListWithPage = productController.getPageWithProductsByCategoryWithPage(ProductCategory.FRUITS,2);
+        resultListWithPage.getBody().setNumberOfElements(productList.size());
 
-        assertEquals(3, Objects.requireNonNull(resultListWithPage.getBody()).size());
+        assertEquals(3, Objects.requireNonNull(resultListWithPage.getBody()).getNumberOfElements());
     }
 
     @Test

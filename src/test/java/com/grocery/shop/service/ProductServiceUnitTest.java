@@ -1,6 +1,7 @@
 package com.grocery.shop.service;
 
 import com.grocery.shop.dto.ProductDtoShort;
+import com.grocery.shop.dto.ProductResponse;
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.mapper.ProductMapper;
@@ -47,8 +48,7 @@ class ProductServiceUnitTest {
         List<Product> productList = Arrays.asList(
                 new Product(1L, "Source1", "Name1", 150., 1.5, "desc1", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS),
                 new Product(2L, "Source2", "Name2", 250., 2.5, "desc2", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS),
-                new Product(3L, "Source3", "Name3", 350., 3.5, "desc3", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS),
-                new Product(4L, "Source4", "Name4", 450., 4.5, "desc4", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS)
+                new Product(3L, "Source3", "Name3", 350., 3.5, "desc3", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS)
         );
 
         List<ProductDtoShort> expectedList = Arrays.asList(
@@ -58,9 +58,9 @@ class ProductServiceUnitTest {
         );
 
         when(productRepository.findAll()).thenReturn(productList);
-        assertEquals(3, productsService.getPage(productRepository.findAll(), 3, 1).size());
-        assertFalse(productsService.getPage(productRepository.findAll(), 3, 1).size() > 3);
-        assertEquals(expectedList, productsService.getPage(productRepository.findAll(), 3, 1));
+        assertEquals(3, (productsService.getPage(productRepository.findAll(), 3, 1)).getNumberOfElements());
+        assertFalse(productsService.getPage(productRepository.findAll(), 3, 1).getNumberOfElements() > 3);
+        assertEquals(expectedList, (productsService.getPage(productRepository.findAll(), 3, 1)).getProductDtoShort());
     }
 
     @Test
@@ -77,9 +77,9 @@ class ProductServiceUnitTest {
         );
 
         when(productRepository.findAll()).thenReturn(productList);
-        List<ProductDtoShort> secondPage = productsService.getPage(productRepository.findAll(), 3, 2);
+        ProductResponse secondPage = productsService.getPage(productRepository.findAll(), 3, 2);
 
-        assertEquals(expectedList, secondPage);
+        assertEquals(expectedList, secondPage.getProductDtoShort());
 
     }
 
@@ -117,9 +117,9 @@ class ProductServiceUnitTest {
 
         when(productRepository.findAll()).thenReturn(productList);
 
-        List<ProductDtoShort> firstPage = productsService.getPageWithProductsOnDashboard(1);
+        ProductResponse firstPage = productsService.getPageWithProductsOnDashboard(1);
 
-        assertThat(firstPage).isEqualTo(expectedList);
+        assertThat(firstPage.getProductDtoShort()).isEqualTo(expectedList);
     }
 
 
@@ -266,8 +266,8 @@ class ProductServiceUnitTest {
                 new ProductDtoShort(3L, "source", "name", 150.3, 3.3)
         );
         when(productRepository.findAllByCategory(ProductCategory.FRUITS)).thenReturn(productList);
-        List<ProductDtoShort> firstPage = productsService.getPage(productRepository.findAllByCategory(ProductCategory.FRUITS), 3, 1);
-        assertEquals(expectedList, firstPage);
+        ProductResponse firstPage = productsService.getPage(productRepository.findAllByCategory(ProductCategory.FRUITS), 3, 1);
+        assertEquals(expectedList, firstPage.getProductDtoShort());
     }
 
     @Test
@@ -284,9 +284,9 @@ class ProductServiceUnitTest {
         );
 
         when(productRepository.findAll()).thenReturn(productList);
-        List<ProductDtoShort> secondPage = productsService.getPage(productRepository.findAll(), 3, 2);
+        ProductResponse secondPage = productsService.getPage(productRepository.findAll(), 3, 2);
 
-        assertEquals(expectedList, secondPage);
+        assertEquals(expectedList, secondPage.getProductDtoShort());
 
     }
 
@@ -306,8 +306,8 @@ class ProductServiceUnitTest {
         }
 
         when(productRepository.findAllByCategory(ProductCategory.FRUITS)).thenReturn(productList);
-        assertEquals(12, productsService.getProductsListByCategory(ProductCategory.FRUITS,1).size());
-        assertEquals(expectedList, productsService.getProductsListByCategory(ProductCategory.FRUITS,1));
+        assertEquals(12, productsService.getProductsListByCategory(ProductCategory.FRUITS,1).getNumberOfElements());
+        assertEquals(expectedList, (productsService.getProductsListByCategory(ProductCategory.FRUITS,1)).getProductDtoShort());
     }
 
 }
