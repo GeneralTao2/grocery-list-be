@@ -44,16 +44,20 @@ class AuthenticationServiceTest {
         String email = "u@uu.uu";
         LoginUser loginUser = new LoginUser(email, "123456");
         Role role = Role.USER;
-        User user = new User(email,"123456", role);
-        String token = jwtTokenUtil.generateToken(user);
+        User user = new User(email,"password is not important", role);
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
         LoginResponse actualLoginResponse = authenticationService.login(loginUser);
 
+        String returnedToken = actualLoginResponse.getToken();
+        String emailFromToken = jwtTokenUtil.getUsernameFromToken(returnedToken);
+        String roleFromToken = jwtTokenUtil.getRoleFromToken(returnedToken).get(0).getAuthority();
+
         assertThat(actualLoginResponse.getEmail()).isEqualTo(email);
-        assertThat(actualLoginResponse.getToken()).isEqualTo(token);
         assertThat(actualLoginResponse.getRole()).isEqualTo(role.toString());
+        assertThat(emailFromToken).isEqualTo(email);
+        assertThat(roleFromToken).isEqualTo(role.toString());
        }
 
     @Test
