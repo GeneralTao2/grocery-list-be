@@ -17,7 +17,7 @@ public class ProductDtoFull {
     private double price;
     private double rate;
     private String description;
-    private ProductCategory productCategory;
     private Type type;
     private int size;
+    private ProductCategory category;
 }
