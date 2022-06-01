@@ -6,8 +6,8 @@ import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.mapper.ProductMapper;
 import com.grocery.shop.model.Product;
-import com.grocery.shop.model.Type;
 import com.grocery.shop.model.ProductCategory;
+import com.grocery.shop.model.Type;
 import com.grocery.shop.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,9 +52,9 @@ class ProductServiceUnitTest {
         );
 
         List<ProductDtoShort> expectedList = Arrays.asList(
-                new ProductDtoShort(1L, "Source1", "Name1", 150., 1.5),
-                new ProductDtoShort(2L, "Source2", "Name2", 250., 2.5),
-                new ProductDtoShort(3L, "Source3", "Name3", 350., 3.5)
+                new ProductDtoShort(1L, "Source1", "Name1", 150., 1.5, Type.WEIGHABLE, 3),
+                new ProductDtoShort(2L, "Source2", "Name2", 250., 2.5, Type.WEIGHABLE, 3),
+                new ProductDtoShort(3L, "Source3", "Name3", 350., 3.5, Type.WEIGHABLE, 3)
         );
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -73,7 +73,7 @@ class ProductServiceUnitTest {
         );
 
         List<ProductDtoShort> expectedList = Collections.singletonList(
-                new ProductDtoShort(4L, "Source4", "Name4", 450., 4.5)
+                new ProductDtoShort(4L, "Source4", "Name4", 450., 4.5, Type.WEIGHABLE, 3)
         );
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -112,7 +112,7 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < expectedPageSize; i++) {
             expectedList.add(new ProductDtoShort(1L + i,
-                    "Source", "Name", 150., 1.5));
+                    "Source", "Name", 150., 1.5, Type.WEIGHABLE, 3));
         }
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -143,12 +143,12 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < 20; i++) {
             productList.add(new Product(1L + i,
-                    "Source", "Name", 150., 1.5, "Description", i, Type.WEIGHABLE, i, ProductCategory.FRUITS));
+                    "Source", "Name", 150., 1.5, "Description", i, Type.WEIGHABLE, 3, ProductCategory.FRUITS));
         }
 
         for (int i = 19; i > 4; i--) {
             expectedList.add(new ProductDtoShort(1L + i,
-                    "Source", "Name", 150., 1.5));
+                    "Source", "Name", 150., 1.5, Type.WEIGHABLE, 3));
         }
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -194,7 +194,7 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < 15; i++) {
             expectedList.add(new ProductDtoShort(1L + i,
-                    "Source", "Name", 150., 1.5));
+                    "Source", "Name", 150., 1.5, Type.WEIGHABLE, 5));
         }
 
         when(productRepository.searchByName(eq("Name"), any(Pageable.class)))
@@ -261,9 +261,9 @@ class ProductServiceUnitTest {
                 new Product(4L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS)
         );
         List<ProductDtoShort> expectedList = Arrays.asList(
-                new ProductDtoShort(1L, "source", "name", 150.3, 3.3),
-                new ProductDtoShort(2L, "source", "name", 150.3, 3.3),
-                new ProductDtoShort(3L, "source", "name", 150.3, 3.3)
+                new ProductDtoShort(1L, "source", "name", 150.3, 3.3, Type.WEIGHABLE, 3),
+                new ProductDtoShort(2L, "source", "name", 150.3, 3.3, Type.WEIGHABLE, 3),
+                new ProductDtoShort(3L, "source", "name", 150.3, 3.3, Type.WEIGHABLE, 3)
         );
         when(productRepository.findAllByCategory(ProductCategory.FRUITS)).thenReturn(productList);
         ProductResponse firstPage = productsService.getPage(productRepository.findAllByCategory(ProductCategory.FRUITS), 3, 1);
@@ -280,7 +280,7 @@ class ProductServiceUnitTest {
         );
 
         List<ProductDtoShort> expectedList = Collections.singletonList(
-                new ProductDtoShort(4L, "source", "name", 150.3, 3.3)
+                new ProductDtoShort(4L, "source", "name", 150.3, 3.3, Type.WEIGHABLE, 3)
         );
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -302,7 +302,7 @@ class ProductServiceUnitTest {
 
         for (int i = 0; i < 12; i++) {
             expectedList.add(new ProductDtoShort(1L + i,
-                    "Source", "Name", 150., 1.5));
+                    "Source", "Name", 150., 1.5, Type.WEIGHABLE, 5));
         }
 
         when(productRepository.findAllByCategory(ProductCategory.FRUITS)).thenReturn(productList);
