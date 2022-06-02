@@ -1,0 +1,1 @@
+alter table users alter column email type VARCHAR(320);
