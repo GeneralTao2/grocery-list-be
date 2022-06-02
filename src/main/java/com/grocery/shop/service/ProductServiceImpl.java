@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
                 .map(ProductMapper.MAPPER::toDTOShort)
                 .collect(Collectors.toList()));
 
-        productResponse.setNumberOfPages(productList.size() != 0 ? productList.size() / 12 + 1 : 0);
+        productResponse.setNumberOfPages(lastPossiblePage);
         productResponse.setNumberOfElements(productList.size());
 
         return productResponse;
