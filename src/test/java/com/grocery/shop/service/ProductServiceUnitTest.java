@@ -177,9 +177,10 @@ class ProductServiceUnitTest {
         when(productRepository.searchByName(eq(productName), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(productList));
 
-        final Page<ProductDtoShort> actualProductPage = productsService.getPageWithProductsWithName(productName, 1);
+        final ProductResponse actualProductResponse = productsService.getPageWithProductsWithName(productName, 1);
 
-        Assertions.assertThat(actualProductPage.getContent()).containsExactlyInAnyOrderElementsOf(expectedProductPage.getContent());
+        Assertions.assertThat(actualProductResponse.getProductDtoShort())
+                  .containsExactlyInAnyOrderElementsOf(expectedProductPage.getContent());
     }
 
     @Test
@@ -201,7 +202,7 @@ class ProductServiceUnitTest {
                 .thenReturn(new PageImpl<>(productList.subList(0, 15)));
 
         final List<ProductDtoShort> actualList = productsService.getPageWithProductsWithName("Name", 1)
-                .getContent();
+                .getProductDtoShort();
 
         Assertions.assertThat(actualList).containsExactlyInAnyOrderElementsOf(expectedList);
     }
@@ -232,24 +233,9 @@ class ProductServiceUnitTest {
     }
 
     @Test
-    void getProductsByNameReturnsDefaultProductPageForNullName() {
-        final List<Product> productList = Arrays.asList(
-                new Product(1L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS),
-                new Product(2L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS),
-                new Product(3L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS),
-                new Product(4L, "source", "name", 150.3, 3.3, "desc1", 3, Type.WEIGHABLE, 3, ProductCategory.FRUITS)
-        );
-        final List<ProductDtoShort> productDtoList = productList.stream()
-                .map(ProductMapper.MAPPER::toDTOShort)
-                .collect(Collectors.toList());
-
-        final Page<ProductDtoShort> expectedProductPage = new PageImpl<>(productDtoList);
-
-        when(productRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(productList));
-
-        final Page<ProductDtoShort> actualProductPage = productsService.getPageWithProductsWithName(null, 1);
-
-        Assertions.assertThat(actualProductPage.getContent()).containsExactlyInAnyOrderElementsOf(expectedProductPage.getContent());
+    void getProductsByNameThrowsExceptionForBlankName() {
+        assertThatExceptionOfType(ProductsNotFoundException.class)
+                .isThrownBy(() -> productsService.getPageWithProductsWithName(" ", 1));
     }
 
     @Test

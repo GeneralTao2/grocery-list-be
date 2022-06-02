@@ -45,14 +45,14 @@ public class ProductController {
     }
 
     @GetMapping(value = "/products/name={name}")
-    public List<ProductDtoShort> getPageWithProductsFilteredByName(@PathVariable("name") final String name) {
-        return productService.getPageWithProductsWithName(name, 1).getContent();
+    public ProductResponse getPageWithProductsFilteredByName(@PathVariable("name") final String name) {
+        return productService.getPageWithProductsWithName(name, 1);
     }
 
     @GetMapping(value = "/products/name={name}/page={page}")
-    public List<ProductDtoShort> getPageWithProductsFilteredByName(@PathVariable("name") final String name,
+    public ProductResponse getPageWithProductsFilteredByName(@PathVariable("name") final String name,
                                                                    @PathVariable("page") final int page){
-        return productService.getPageWithProductsWithName(name, page).getContent();
+        return productService.getPageWithProductsWithName(name, page);
     }
 
     @GetMapping(value = "/products/category={category}/page={page}")

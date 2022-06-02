@@ -81,16 +81,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductDtoShort> getPageWithProductsWithName(String name, int pageNumber) {
+    public ProductResponse getPageWithProductsWithName(String name, int pageNumber) {
         final int pageSize = 15;
 
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
 
-        if (isNull(name)) {
-            return getProductPage(productRepository.findAll(pageable), pageable);
+        if (isBlankString(name)) {
+            throw new ProductsNotFoundException("Products not found for this name");
         }
 
-        return getProductPage(productRepository.searchByName(name, pageable), pageable);
+        Page<ProductDtoShort> resultPage = getProductPage(productRepository.searchByName(name, pageable), pageable);
+
+        return new ProductResponse(resultPage.getContent(), resultPage.getTotalPages(), (int) resultPage.getTotalElements());
+    }
+
+    private static boolean isBlankString(String string){
+        return isNull(string) || string.trim().isEmpty();
     }
 
     private Page<ProductDtoShort> getProductPage(Page<Product> productPage, Pageable pageable) {
