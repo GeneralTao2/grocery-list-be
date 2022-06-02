@@ -20,8 +20,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> onInvalidMethodArgument(MethodArgumentNotValidException exception) {
+        String errorMessage = "Validation failed for unknown reason";
+
+        if(exception.getBindingResult().hasFieldErrors("email")){
+            errorMessage = "Validation failed for email field. Please enter valid email address: it should not be " +
+                    "empty and should" +
+                    " contain " +
+                    "@ symbol, dot (.) symbol and at least 2 symbols for domain part";
+        } else if(exception.getBindingResult().hasFieldErrors("password")){
+            errorMessage = "Validation failed for password field. Password should be alphanumeric with size between 5" +
+                    " and 10 symbols";
+        }
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponse(exception.getMessage(), 400));
+                             .body(new ErrorResponse(errorMessage, 400));
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
@@ -33,7 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> onException(Exception exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(exception.getMessage(), 500));
+                .body(new ErrorResponse("Unknown error occurred", 500));
     }
 
     @ExceptionHandler(ProductCategoryNotFound.class)
