@@ -163,13 +163,16 @@ class ProductControllerTest {
         );
 
         final Page<ProductDtoShort> productPage = new PageImpl<>(productList);
+        final ProductResponse productResponse = new ProductResponse(productPage.getContent(),
+                                                                    productPage.getTotalPages(), productPage.getNumberOfElements());
 
         when(productService.getPageWithProductsWithName(Mockito.any(String.class), Mockito.any(Integer.class)))
-                .thenReturn(productPage);
+                .thenReturn(productResponse);
 
-        final List<ProductDtoShort> resultList = productController.getPageWithProductsFilteredByName(productName);
+        final ProductResponse resultProductResponse =
+                productController.getPageWithProductsFilteredByName(productName);
 
-        assertThat(resultList).containsExactlyInAnyOrderElementsOf(productPage.getContent());
+        assertThat(resultProductResponse.getProductDtoShort()).containsExactlyInAnyOrderElementsOf(productPage.getContent());
     }
 
     @Test
@@ -184,13 +187,15 @@ class ProductControllerTest {
         );
 
         final Page<ProductDtoShort> productPage = new PageImpl<>(productList);
+        final ProductResponse productResponse = new ProductResponse(productPage.getContent(),
+                                                                    productPage.getTotalPages(), productPage.getNumberOfElements());
 
         when(productService.getPageWithProductsWithName(Mockito.any(String.class), Mockito.any(Integer.class)))
-                .thenReturn(productPage);
+                .thenReturn(productResponse);
 
-        final List<ProductDtoShort> resultList = productController.getPageWithProductsFilteredByName(productName,
-                                                                                                pageNumber);
+        final ProductResponse resultProductResponse =
+                productController.getPageWithProductsFilteredByName(productName, pageNumber);
 
-        assertThat(resultList).containsExactlyInAnyOrderElementsOf(productPage.getContent());
+        assertThat(resultProductResponse.getProductDtoShort()).containsExactlyInAnyOrderElementsOf(productPage.getContent());
     }
 }
