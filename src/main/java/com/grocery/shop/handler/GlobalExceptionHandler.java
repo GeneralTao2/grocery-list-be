@@ -50,9 +50,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> whenCategoryDoesNotExists(ProductCategoryNotFound productCategoryNotFound) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(productCategoryNotFound.getMessage(), 404));
+    public ResponseEntity<ErrorResponse> onMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
+        if(e.getMostSpecificCause().getClass() == ProductCategoryNotFound.class) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse(e.getMostSpecificCause().getMessage(), 404));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponse("Bad Request: [" + e.getMostSpecificCause().getMessage() + "]", 400));
     }
 
     @ExceptionHandler(ProductsNotFoundException.class)
