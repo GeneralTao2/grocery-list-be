@@ -1,8 +1,8 @@
 package com.grocery.shop.handler;
 
 import com.grocery.shop.exception.PageNotFoundException;
-import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductCategoryNotFound;
+import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.exception.UserNotFoundException;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -48,10 +49,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("Unknown error occurred", 500));
     }
 
-    @ExceptionHandler(ProductCategoryNotFound.class)
-    public ResponseEntity<ErrorResponse> whenCategoryDoesNotExists(ProductCategoryNotFound productCategoryNotFound) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(productCategoryNotFound.getMessage(), 404));
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> onMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
+        if(e.getMostSpecificCause().getClass() == ProductCategoryNotFound.class) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse(e.getMostSpecificCause().getMessage(), 404));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponse("Bad Request: [" + e.getMostSpecificCause().getMessage() + "]", 400));
     }
 
     @ExceptionHandler(ProductsNotFoundException.class)
