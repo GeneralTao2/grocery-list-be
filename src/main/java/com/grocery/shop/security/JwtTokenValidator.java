@@ -1,5 +1,7 @@
 package com.grocery.shop.security;
 
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,8 +30,19 @@ public class JwtTokenValidator {
 
         String tokenWithoutPrefix = token.replace(TOKEN_PREFIX, "");
 
-        if (jwtTokenUtil.isTokenExpired(tokenWithoutPrefix)) {
-            logger.debug("the token is expired and not valid anymore");
+        try {
+            if (jwtTokenUtil.isTokenExpired(tokenWithoutPrefix)) {
+                logger.debug("the token is expired and not valid anymore");
+                return false;
+            }
+        } catch (IllegalArgumentException e) {
+            logger.error("an error occured during getting email from token", e);
+            return false;
+        } catch (SignatureException e) {
+            logger.debug("the token broken", e);
+            return false;
+        } catch (MalformedJwtException e) {
+            logger.debug("MalformedJwtException", e);
             return false;
         }
 

@@ -1,6 +1,7 @@
 package com.grocery.shop.security;
 
 import com.grocery.shop.dto.JwtUserData;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -31,6 +32,8 @@ public class JwtUserDataDecoder {
             logger.error("an error occured during getting email from token", e);
         } catch (SignatureException e) {
             logger.debug("the token broken", e);
+        } catch (MalformedJwtException e) {
+            logger.debug("MalformedJwtException", e);
         }
 
         return new JwtUserData(email, roles);
