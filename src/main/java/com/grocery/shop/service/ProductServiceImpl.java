@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
         productResponse.setProductDtoShort(productList.stream()
                 .skip(skipCount)
                 .limit(resultsPerPage)
-                .map(ProductMapper.MAPPER::toDTOShort)
+                .map(ProductMapper.MAPPER::toDtoShort)
                 .collect(Collectors.toList()));
 
         productResponse.setNumberOfPages(lastPossiblePage);
@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDtoShort> mostPopularProducts = productRepository.findAll().stream()
                 .sorted(Comparator.comparingInt(Product::getCountOfSoldProducts).reversed())
                 .limit(15)
-                .map(ProductMapper.MAPPER::toDTOShort)
+                .map(ProductMapper.MAPPER::toDtoShort)
                 .collect(Collectors.toList());
         if (mostPopularProducts.isEmpty()) {
             throw new ProductsNotFoundException("Not enough products");
@@ -101,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
 
     private Page<ProductDtoShort> getProductPage(Page<Product> productPage, Pageable pageable) {
         List<ProductDtoShort> productDtoList = productPage.stream()
-                .map(ProductMapper.MAPPER::toDTOShort)
+                .map(ProductMapper.MAPPER::toDtoShort)
                 .collect(Collectors.toList());
 
         Page<ProductDtoShort> resultPage = new PageImpl<>(productDtoList, pageable, productPage.getTotalElements());

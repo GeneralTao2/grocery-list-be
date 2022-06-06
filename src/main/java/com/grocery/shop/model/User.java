@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 
 
@@ -29,5 +30,4 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
 }

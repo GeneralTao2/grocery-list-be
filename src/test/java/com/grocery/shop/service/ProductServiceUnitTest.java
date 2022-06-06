@@ -169,7 +169,7 @@ class ProductServiceUnitTest {
                 new Product(2L, "Source2", "Apple Juice", 350., 3.5, "Description2", 3, Type.WEIGHABLE, 4, ProductCategory.FRUITS)
         );
         final List<ProductDtoShort> productDtoList = productList.stream()
-                .map(ProductMapper.MAPPER::toDTOShort)
+                .map(ProductMapper.MAPPER::toDtoShort)
                 .collect(Collectors.toList());
 
         final Page<ProductDtoShort> expectedProductPage = new PageImpl<>(productDtoList);

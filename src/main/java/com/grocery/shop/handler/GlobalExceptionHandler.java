@@ -1,11 +1,14 @@
 package com.grocery.shop.handler;
 
+
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductCategoryNotFound;
-import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.exception.UserNotFoundException;
+import com.grocery.shop.exception.ProductNotFoundException;
+import com.grocery.shop.exception.CustomerDetailsNotFoundException;
+
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
@@ -87,6 +90,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
     protected void productNotFoundException() {
+
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CustomerDetailsNotFoundException.class)
+    protected void customerDetailsNotFoundException() {
 
     }
 
