@@ -1,0 +1,1 @@
+alter table products alter column description type VARCHAR(510);
