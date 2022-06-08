@@ -45,7 +45,7 @@ public class CustomerDetailsServiceTest {
         when(customerDetailsService.addNewCustomerDetails(any(CustomerDetailsDto.class))).thenReturn(customerDetailsDto);
 
         assertThat(customerDetailsDto).isEqualTo(customerDetailsRepository.save(customerDetailsDto));
-        assertThat(customerDetailsDto).isEqualTo(customerDetailsService.addNewCustomerDetails(customerDetailsDto)); //returns null
+        assertThat(customerDetailsDto).isEqualTo(customerDetailsService.addNewCustomerDetails(customerDetailsDto));
     }
 
     @Test

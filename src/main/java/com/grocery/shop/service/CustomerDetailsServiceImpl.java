@@ -6,15 +6,12 @@ import com.grocery.shop.mapper.CustomerDetailsMapper;
 import com.grocery.shop.model.CustomerDetails;
 import com.grocery.shop.repository.CustomerDetailsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 
-    @Autowired
     private final CustomerDetailsRepository customerDetailsRepository;
 
     @Override

@@ -1,9 +1,7 @@
 package com.grocery.shop.mapper;
 
-import com.grocery.shop.dto.CustomerDetailsDto;
 import com.grocery.shop.dto.ProductDtoFull;
 import com.grocery.shop.dto.ProductDtoShort;
-import com.grocery.shop.model.CustomerDetails;
 import com.grocery.shop.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

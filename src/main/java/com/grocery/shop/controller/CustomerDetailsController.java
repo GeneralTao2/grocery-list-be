@@ -13,7 +13,7 @@ public class CustomerDetailsController {
     private final CustomerDetailsService customerDetailsService;
 
     @PostMapping("/customerDetails")
-    public ResponseEntity<CustomerDetailsDto> createEmployee(@RequestBody CustomerDetailsDto customerDetailsDto){
+    public ResponseEntity<CustomerDetailsDto> createCustomerDetails(@RequestBody CustomerDetailsDto customerDetailsDto){
         return new ResponseEntity<>(customerDetailsService.addNewCustomerDetails(customerDetailsDto), HttpStatus.OK) ;
     }
 
