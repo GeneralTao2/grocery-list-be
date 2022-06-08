@@ -14,12 +14,12 @@ public class CustomerDetailsController {
 
     @PostMapping("/customerDetails")
     public ResponseEntity<CustomerDetailsDto> createEmployee(@RequestBody CustomerDetailsDto customerDetailsDto){
-        return new ResponseEntity<>(customerDetailsService.AddNewCustomerDetails(customerDetailsDto), HttpStatus.OK) ;
+        return new ResponseEntity<>(customerDetailsService.addNewCustomerDetails(customerDetailsDto), HttpStatus.OK) ;
     }
 
     @PutMapping("/customerDetails/{id}")
     public ResponseEntity<String> updateCustomerDetailsById(@PathVariable(value = "id") int customerDetails_id, @RequestBody CustomerDetailsDto customerDetailsDto){
-        if(customerDetailsService.UpdateCustomerDetails(customerDetailsDto,customerDetails_id)){
+        if(customerDetailsService.updateCustomerDetails(customerDetailsDto,customerDetails_id)){
             return new ResponseEntity<>("CustomerDetails is replaced successfully", HttpStatus.OK);
         }
         else{

@@ -14,5 +14,4 @@ public class CustomerDetailsDto {
     private String lastName;
     private Boolean keepMeInTouch;
     private Address address;
-
 }

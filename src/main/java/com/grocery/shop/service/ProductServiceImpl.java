@@ -41,6 +41,7 @@ public class ProductServiceImpl implements ProductService {
         ProductResponse productResponse = new ProductResponse();
 
         productResponse.setProductDtoShort(productList.stream()
+                .sorted((p1,p2)-> p1.getName().compareTo(p2.getName()))
                 .skip(skipCount)
                 .limit(resultsPerPage)
                 .map(ProductMapper.MAPPER::toDtoShort)

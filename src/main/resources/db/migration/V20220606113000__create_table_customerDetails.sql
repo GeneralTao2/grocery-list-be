@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS customerDetails
     firstName       VARCHAR(24),
     lastName        VARCHAR(24),
     keepMeInTouch   BIT,
-    addressId       BIGSERIAL FOREIGN KEY
+    addressId       BIGSERIAL
 );
 
 ALTER SEQUENCE customerDetails_seq OWNED BY customerDetails.id;
