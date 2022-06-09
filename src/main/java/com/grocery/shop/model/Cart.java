@@ -19,6 +19,7 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @Setter
