@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 
 
 @Getter
@@ -20,7 +21,9 @@ import javax.validation.constraints.Email;
 @SequenceGenerator(name = "default_generator", sequenceName = "user_seq", allocationSize = 1)
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = -7437283172863781019L;
 
     @Email
     private String email;

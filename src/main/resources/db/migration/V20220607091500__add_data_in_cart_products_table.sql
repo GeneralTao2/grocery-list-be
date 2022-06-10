@@ -15,5 +15,3 @@ INSERT INTO cart_products (cart_id, products_id) VALUES (2, 28);
 INSERT INTO cart_products (cart_id, products_id) VALUES (2, 13);
 
 INSERT INTO cart_products (cart_id, products_id) VALUES (2, 41);
-
-INSERT INTO cart_products (cart_id, products_id) VALUES (2, 13);

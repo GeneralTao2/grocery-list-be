@@ -1,0 +1,1 @@
+alter table cart_products add constraint cart_product_pk PRIMARY KEY (cart_id, products_id);
