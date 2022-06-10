@@ -37,7 +37,7 @@ public class LoadDB {
         return args -> {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            List<User> users = List.of(
+            /*List<User> users = List.of(
                     new User("u@u.u", encoder.encode("123456"), Role.USER),
                     new User("q@q.q", encoder.encode("123456"), Role.USER),
                     new User("w@q.q", encoder.encode("123456"), Role.ADMIN)
@@ -68,23 +68,31 @@ public class LoadDB {
             productRepository.saveAll(products);
 
             products = productRepository.findAll();
-
+*/
+            List<User> users = userRepository.findAll();
+            List<Product> products = productRepository.findAll();
 
             Cart cart1 = cartRepository.findByUserId(users.get(0).getId());
-            cart1.getCartItems().putAll(products.subList(0,3).stream()
+            cart1.getCartItems().putAll(products.subList(10,12).stream()
                     .collect(Collectors.toMap(p -> p, p -> p.getSize() + 5)));
             cartRepository.save(cart1);
 
 
             Cart cart2 = cartRepository.findByUserId(users.get(1).getId());
-            cart2.getCartItems().putAll(products.subList(5,8).stream()
+            cart2.getCartItems().putAll(products.subList(20,22).stream()
                     .collect(Collectors.toMap(p -> p, p -> p.getSize() + 5)));
             cartRepository.save(cart2);
 
+
+
             Cart cart3 = cartRepository.findByUserId(users.get(0).getId());
-            cart3.getCartItems().remove(products.get(0));
-            cart3.getCartItems().remove(products.get(1));
-            cart3.getCartItems().replace(products.get(2), 100);
+            cart3.getCartItems().remove(
+                    new ArrayList<>(cart3.getCartItems().keySet()).get(0)
+            );
+            cart3.getCartItems().remove(
+                    new ArrayList<>(cart3.getCartItems().keySet()).get(1));
+            cart3.getCartItems().replace(
+                    new ArrayList<>(cart3.getCartItems().keySet()).get(2), 200);
             cartRepository.save(cart3);
 
 
