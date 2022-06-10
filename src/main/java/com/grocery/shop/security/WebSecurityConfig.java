@@ -1,6 +1,5 @@
 package com.grocery.shop.security;
 
-import com.grocery.shop.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,11 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/home",
                         "/login",
                         "/products",
-                        "/products/**",
                         "/products/page*",
                         "/products/name*",
                         "/products/name*/page*",
                         "/products/category*",
+                        "/products/**",
                         "/product/*",
                         "/register",
                         "/popular-products",
@@ -47,8 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v3/api-docs/**",
                         "/swagger-ui.html"
                 ).permitAll()
-                .antMatchers("/hey").hasAuthority(Role.USER.toString())
-                .antMatchers("/yo").hasAuthority(Role.ADMIN.toString())
                 .anyRequest().authenticated()
                 .and()
                 .logout()
