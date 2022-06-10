@@ -86,13 +86,9 @@ public class LoadDB {
 
 
             Cart cart3 = cartRepository.findByUserId(users.get(0).getId());
-            cart3.getCartItems().remove(
-                    new ArrayList<>(cart3.getCartItems().keySet()).get(0)
-            );
-            cart3.getCartItems().remove(
-                    new ArrayList<>(cart3.getCartItems().keySet()).get(1));
-            cart3.getCartItems().replace(
-                    new ArrayList<>(cart3.getCartItems().keySet()).get(2), 200);
+            cart3.getCartItems().remove(productRepository.findById(12L).get());
+            cart3.getCartItems().remove(productRepository.findById(1L).get());
+            cart3.getCartItems().replace(productRepository.findById(10L).get(), 200);
             cartRepository.save(cart3);
 
 
