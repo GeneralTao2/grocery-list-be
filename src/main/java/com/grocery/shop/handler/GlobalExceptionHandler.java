@@ -23,18 +23,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> onInvalidMethodArgument(MethodArgumentNotValidException exception) {
         String errorMessage = "Validation failed for unknown reason";
 
-        if(exception.getBindingResult().hasFieldErrors("email")){
+        if (exception.getBindingResult().hasFieldErrors("email")) {
             errorMessage = "Validation failed for email field. Please enter valid email address: it should not be " +
                     "empty and should" +
                     " contain " +
                     "@ symbol, dot (.) symbol and at least 2 symbols for domain part";
-        } else if(exception.getBindingResult().hasFieldErrors("password")){
+        } else if (exception.getBindingResult().hasFieldErrors("password")) {
             errorMessage = "Validation failed for password field. Password should be alphanumeric with size between 5" +
                     " and 10 symbols";
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                             .body(new ErrorResponse(errorMessage, 400));
+                .body(new ErrorResponse(errorMessage, 400));
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
@@ -50,8 +50,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> onMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
-        if(e.getMostSpecificCause().getClass() == ProductCategoryNotFound.class) {
+    public ResponseEntity<ErrorResponse> onMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        if (e.getMostSpecificCause().getClass() == ProductCategoryNotFound.class) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse(e.getMostSpecificCause().getMessage(), 404));
         }
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PageNotFoundException.class)
     public ResponseEntity<ErrorResponse> onPagesNotFound(Exception e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                             .body(new ErrorResponse(e.getMessage(), 404));
+                .body(new ErrorResponse(e.getMessage(), 404));
     }
 
     @Value

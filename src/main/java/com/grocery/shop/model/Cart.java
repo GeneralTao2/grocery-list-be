@@ -6,21 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.SecondaryTable;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -37,7 +35,13 @@ public class Cart {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private List<Product> products;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "cart_products", joinColumns = @JoinColumn(name = "cart_id"))
+    @MapKeyJoinColumn(name = "products_id")
+    @Column(name = "quantity")
+    private Map<Product, Integer> cartItems;
 
+    public Cart(User user) {
+        this.user = user;
+    }
 }

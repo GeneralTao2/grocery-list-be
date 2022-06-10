@@ -2,8 +2,10 @@ package com.grocery.shop.service;
 
 import com.grocery.shop.dto.UserDto;
 import com.grocery.shop.exception.UserAlreadyExistsException;
+import com.grocery.shop.model.Cart;
 import com.grocery.shop.model.Role;
 import com.grocery.shop.model.User;
+import com.grocery.shop.repository.CartRepository;
 import com.grocery.shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +18,14 @@ import javax.transaction.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public void saveUserWithCart(User user) {
+        User userWithId = userRepository.save(user);
+        cartRepository.save(new Cart(userWithId));
+    }
 
     @Override
     public void saveUser(UserDto userDto) {
@@ -26,7 +35,7 @@ public class UserServiceImpl implements UserService {
         final User user = toUserEntity(userDto);
         encodePassword(user, userDto);
 
-        userRepository.save(user);
+        saveUserWithCart(user);
     }
 
     private static User toUserEntity(UserDto userDto) {

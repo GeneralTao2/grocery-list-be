@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+
     @PostMapping(value = "/login")
     public LoginResponse login(@RequestBody @Valid LoginUser loginUser) throws AuthenticationException {
         return authenticationService.login(loginUser);
