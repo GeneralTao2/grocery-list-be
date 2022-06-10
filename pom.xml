@@ -12,7 +12,7 @@
 
     <groupId>com.grocery.shop</groupId>
     <artifactId>spring_grocery_shop</artifactId>
-    <version>1.0.27</version>
+    <version>1.0.28</version>
 
     <name>spring_grocery_shop</name>
     <description>spring_grocery_shop</description>
@@ -195,6 +195,30 @@
                         <configFile>flyway.conf</configFile>
                     </configFiles>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
