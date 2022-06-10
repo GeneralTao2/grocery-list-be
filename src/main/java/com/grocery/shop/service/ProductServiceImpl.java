@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
         return new ProductResponse(resultPage.getContent(), resultPage.getTotalPages(), (int) resultPage.getTotalElements());
     }
 
-    private static boolean isBlankString(String string){
+    private static boolean isBlankString(String string) {
         return isNull(string) || string.trim().isEmpty();
     }
 

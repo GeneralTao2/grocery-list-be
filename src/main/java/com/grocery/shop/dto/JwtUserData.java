@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
+
 @Getter
 @Setter
 @EqualsAndHashCode

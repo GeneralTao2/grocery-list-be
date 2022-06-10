@@ -4,6 +4,7 @@ import com.grocery.shop.dto.UserDto;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.model.Role;
 import com.grocery.shop.model.User;
+import com.grocery.shop.repository.CartRepository;
 import com.grocery.shop.repository.UserRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private CartRepository cartRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;

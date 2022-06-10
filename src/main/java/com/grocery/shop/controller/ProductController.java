@@ -51,7 +51,7 @@ public class ProductController {
 
     @GetMapping(value = "/products/name={name}/page={page}")
     public ProductResponse getPageWithProductsFilteredByName(@PathVariable("name") final String name,
-                                                                   @PathVariable("page") final int page){
+                                                             @PathVariable("page") final int page) {
         return productService.getPageWithProductsWithName(name, page);
     }
 
