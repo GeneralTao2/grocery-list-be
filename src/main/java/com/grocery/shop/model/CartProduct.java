@@ -10,19 +10,19 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@Entity
-@Table(name="carts_products")
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@Entity
+//@Table(name="carts_products")
 public class CartProduct {
 
-    @EmbeddedId
-    @JsonIgnore
-    private CartProductPK pk;
-
-    @Column(nullable = false)
-    private Integer quantity;
+//    @EmbeddedId
+//    @JsonIgnore
+//    private CartProductPK pk;
+//
+//    @Column(nullable = false)
+//    private Integer quantity;
 
 //    public CartProduct(Cart cart, Product product, Integer quantity) {
 //        pk = new CartProductPK();
