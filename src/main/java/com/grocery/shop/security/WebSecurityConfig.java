@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v3/api-docs/**",
                         "/swagger-ui.html"
                 ).permitAll()
+                .antMatchers("/user/cart/one").hasAuthority(Role.USER.toString())
                 .antMatchers("/user/cart/checkout").hasAuthority(Role.USER.toString())
                 .anyRequest().authenticated()
                 .and()

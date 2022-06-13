@@ -1,5 +1,6 @@
 package com.grocery.shop.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,9 @@ public class JwtTokenValidator {
             return false;
         } catch (MalformedJwtException e) {
             logger.debug("MalformedJwtException", e);
+            return false;
+        } catch (ExpiredJwtException e) {
+            logger.debug("JWT token is expired", e);
             return false;
         }
 

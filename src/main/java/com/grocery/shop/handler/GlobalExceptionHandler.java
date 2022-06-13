@@ -1,5 +1,6 @@
 package com.grocery.shop.handler;
 
+import com.grocery.shop.exception.NoProductWithSuchIdException;
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductCategoryNotFound;
 import com.grocery.shop.exception.ProductNotFoundException;
@@ -9,6 +10,8 @@ import com.grocery.shop.exception.UserNotFoundException;
 import com.grocery.shop.exception.NotEnoughProductsInStockException;
 import lombok.AllArgsConstructor;
 import lombok.Value;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,6 +23,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    protected final Log logger = LogFactory.getLog(getClass());
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> onInvalidMethodArgument(MethodArgumentNotValidException exception) {
         String errorMessage = "Validation failed for unknown reason";
@@ -46,6 +51,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> onException(Exception exception) {
+        logger.info(exception.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("Unknown error occurred", 500));
     }
@@ -101,5 +107,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     protected void badCredentialsException() {
 
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NoProductWithSuchIdException.class)
+    protected ErrorResponse noProductWithSuchIdException(NoProductWithSuchIdException exception) {
+        return new ErrorResponse(exception.getMessage(), 450);
     }
 }
