@@ -67,7 +67,7 @@ class UserRegistrationControllerTest extends SecurityContextMocking {
                 .when(userService).saveUser(existingUserDto);
 
         mockMvc.perform(post("/register").contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(existingUserDto)))
-                .andExpect(status().isConflict());
+                                         .content(objectMapper.writeValueAsString(existingUserDto)))
+               .andExpect(status().isConflict());
     }
 }
