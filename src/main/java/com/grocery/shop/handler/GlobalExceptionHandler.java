@@ -1,13 +1,15 @@
 package com.grocery.shop.handler;
 
-import com.grocery.shop.exception.NoProductWithSuchIdException;
+import com.grocery.shop.dto.QuantityResponse;
+import com.grocery.shop.exception.NoMoreProductsInStockException;
+import com.grocery.shop.exception.NotEnoughProductsInStockException;
 import com.grocery.shop.exception.PageNotFoundException;
 import com.grocery.shop.exception.ProductCategoryNotFound;
 import com.grocery.shop.exception.ProductNotFoundException;
+import com.grocery.shop.exception.ProductQuantityIsBiggerThenInDbException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.exception.UserNotFoundException;
-import com.grocery.shop.exception.NotEnoughProductsInStockException;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.apache.commons.logging.Log;
@@ -49,9 +51,9 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(exception.getMessage(), 409));
     }
 
-    @ExceptionHandler(Exception.class)
+    //@ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> onException(Exception exception) {
-        logger.info(exception.getMessage());
+        logger.info(exception.toString());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("Unknown error occurred", 500));
     }
@@ -81,7 +83,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotEnoughProductsInStockException.class)
     public ResponseEntity<ErrorResponse> onNotEnoughProductsInStock(Exception e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                             .body(new ErrorResponse(e.getMessage(), 404));
+                .body(new ErrorResponse(e.getMessage(), 404));
     }
 
     @Value
@@ -110,8 +112,15 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NoProductWithSuchIdException.class)
-    protected ErrorResponse noProductWithSuchIdException(NoProductWithSuchIdException exception) {
-        return new ErrorResponse(exception.getMessage(), 450);
+    @ExceptionHandler(NoMoreProductsInStockException.class)
+    protected QuantityResponse noMoreProductsInStockException(NoMoreProductsInStockException e) {
+        return new QuantityResponse(452, e.getProductQuantity());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProductQuantityIsBiggerThenInDbException.class)
+    protected QuantityResponse productQuantityIsBiggerThenInDbException(ProductQuantityIsBiggerThenInDbException e) {
+        return new QuantityResponse(453, e.getProductQuantity());
+    }
+
 }

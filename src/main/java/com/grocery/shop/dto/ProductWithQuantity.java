@@ -2,14 +2,17 @@ package com.grocery.shop.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductQuantity {
+public class ProductWithQuantity {
+    @NotNull
     private Long productId;
+
+    @NotNull
     private int quantity;
 }
