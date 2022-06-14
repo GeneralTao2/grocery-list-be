@@ -1,5 +1,6 @@
 package com.grocery.shop.security;
 
+import com.grocery.shop.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,10 +43,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/product/*",
                         "/register",
                         "/popular-products",
+                        "/cart/checkout",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
                         "/swagger-ui.html"
                 ).permitAll()
+                .antMatchers("/user/cart/checkout").hasAuthority(Role.USER.toString())
                 .anyRequest().authenticated()
                 .and()
                 .logout()

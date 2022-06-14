@@ -59,6 +59,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
 
+    @Column
+    private int totalCountInStock;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

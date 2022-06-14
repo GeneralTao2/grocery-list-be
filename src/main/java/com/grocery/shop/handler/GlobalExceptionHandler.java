@@ -6,6 +6,7 @@ import com.grocery.shop.exception.ProductNotFoundException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.exception.UserNotFoundException;
+import com.grocery.shop.exception.NotEnoughProductsInStockException;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> onPagesNotFound(Exception e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(e.getMessage(), 404));
+    }
+
+    @ExceptionHandler(NotEnoughProductsInStockException.class)
+    public ResponseEntity<ErrorResponse> onNotEnoughProductsInStock(Exception e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ErrorResponse(e.getMessage(), 404));
     }
 
     @Value
