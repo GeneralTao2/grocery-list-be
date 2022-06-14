@@ -1,10 +1,13 @@
-CREATE SEQUENCE IF NOT EXISTS product_seq;
+CREATE SEQUENCE IF NOT EXISTS product_seq
+MINVALUE 100
+START WITH 100
+INCREMENT BY 1;
 
 CREATE TABLE IF NOT EXISTS products
 (
-    id              BIGSERIAL PRIMARY KEY,
+    id              INTEGER PRIMARY KEY,
     description     VARCHAR(255),
-    image   VARCHAR(255),
+    image           VARCHAR(255),
     name            VARCHAR(40),
     price           DECIMAL(8,2),
     rate            DECIMAL(3,2) DEFAULT 0,
