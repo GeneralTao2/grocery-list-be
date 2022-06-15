@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(exception.getMessage(), 409));
     }
 
-    //@ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> onException(Exception exception) {
         logger.info(exception.toString());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
