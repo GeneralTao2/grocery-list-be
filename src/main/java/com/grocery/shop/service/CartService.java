@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface CartService {
     CartDto checkoutProducts(List<CartItemDto> cartItemDtoList);
-    CartDto checkoutProductsForLoggedInUser ();
-    void addItemsToCard(CartDto cartDto, String token);
-    CartDto getCartItems(String token);
+
+    CartDto checkoutProductsForLoggedInUser();
+
+    void addItemsToCard(CartDto cartDto, String userName);
+
+    CartDto getCartItems(String userName);
 }

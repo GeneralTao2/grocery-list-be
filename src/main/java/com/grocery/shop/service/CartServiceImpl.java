@@ -16,14 +16,15 @@ import com.grocery.shop.repository.ProductRepository;
 import com.grocery.shop.repository.UserRepository;
 import com.grocery.shop.security.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,8 @@ public class CartServiceImpl implements CartService {
     private final ProductRepository productRepository;
 
     private final UserRepository userRepository;
+
+    private final Authentication authentication;
 
     private final JwtTokenUtil jwtTokenUtil;
 
@@ -92,9 +95,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addItemsToCard(CartDto cartDto, String token) {
+    public void addItemsToCard(CartDto cartDto, String userName) {
 
-        String userName = jwtTokenUtil.getUsernameFromToken(token);
         Long userId = userRepository.findByEmail(userName).orElseThrow(
                 UserNotFoundException::new).getId();
         Cart cart = cartRepository.findByUserId(userId);
@@ -114,19 +116,19 @@ public class CartServiceImpl implements CartService {
                         cartDto.getCartItemList().get(i).getQuantity());
             }
         }
-
         cartRepository.save(cart);
     }
 
     @Override
-    public CartDto getCartItems(String token) {
+    public CartDto getCartItems(String userName) {
 
-        String userName = jwtTokenUtil.getUsernameFromToken(token);
         Long userId = userRepository.findByEmail(userName).orElseThrow(
                 UserNotFoundException::new).getId();
 
-        if (Objects.isNull(cartRepository.findByUserId(userId))) {
-            return new CartDto();
+        if (Objects.isNull(userId) || Objects.isNull(cartRepository.findByUserId(userId))) {
+            CartDto emptyCart = new CartDto();
+            emptyCart.setCartItemList(new ArrayList<>());
+            return emptyCart;
         }
 
         Cart cart = cartRepository.findByUserId(userId);
