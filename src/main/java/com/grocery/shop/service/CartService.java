@@ -12,5 +12,7 @@ public interface CartService {
 
     CartDto checkoutProductsForLoggedInUser();
 
-    QuantityResponse addOne(final ProductWithQuantity productWithQuantity);
+    QuantityResponse addOneProductQuantityInCart(final ProductWithQuantity productWithQuantity);
+
+    void editOneProductQuantityInCart(final ProductWithQuantity productWithQuantity);
 }

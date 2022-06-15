@@ -1,5 +1,6 @@
 package com.grocery.shop.handler;
 
+import com.grocery.shop.dto.ErrorResponse;
 import com.grocery.shop.dto.QuantityResponse;
 import com.grocery.shop.exception.NoMoreProductsInStockException;
 import com.grocery.shop.exception.NotEnoughProductsInStockException;
@@ -10,8 +11,6 @@ import com.grocery.shop.exception.ProductQuantityIsBiggerThenInDbException;
 import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserAlreadyExistsException;
 import com.grocery.shop.exception.UserNotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.Value;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
@@ -86,13 +85,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(e.getMessage(), 404));
     }
 
-    @Value
-    @AllArgsConstructor
-    private static class ErrorResponse {
-        String message;
-        int errorCode;
-    }
-
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     protected void userNotFoundException() {
@@ -101,8 +93,8 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
-    protected void productNotFoundException() {
-
+    protected ErrorResponse productNotFoundException(ProductNotFoundException e) {
+        return new ErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND.value());
     }
 
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)

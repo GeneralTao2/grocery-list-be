@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,12 @@ public class CartController {
 
     @PostMapping("/user/cart/one")
     QuantityResponse addOne(@RequestBody @Valid ProductWithQuantity productWithQuantity) {
-        return cartService.addOne(productWithQuantity);
+        return cartService.addOneProductQuantityInCart(productWithQuantity);
+    }
+
+    @PutMapping("/user/cart/one")
+    void editOne(@RequestBody @Valid ProductWithQuantity productWithQuantity) {
+        cartService.editOneProductQuantityInCart(productWithQuantity);
     }
 
     @PostMapping(value = "/cart/checkout")

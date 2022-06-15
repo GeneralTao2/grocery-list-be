@@ -2,6 +2,8 @@ package com.grocery.shop.service;
 
 import com.grocery.shop.dto.CartDto;
 import com.grocery.shop.dto.CartItemDto;
+import com.grocery.shop.dto.ProductWithQuantity;
+import com.grocery.shop.dto.QuantityResponse;
 import com.grocery.shop.dto.UserDetailsImpl;
 import com.grocery.shop.exception.NotEnoughProductsInStockException;
 import com.grocery.shop.exception.ProductNotFoundException;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +31,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -172,6 +176,74 @@ class CartServiceImplTest {
         assertThat(actualDto.getTotalCost())
                 .overridingErrorMessage("Actual total cost is not equal to expected one")
                 .isEqualTo(570);
+
+        SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    void addOneProductQuantityInCart_AddProductToEmptyCart_ReturnQuantityResponse() {
+        final long productId = 1L;
+        ProductWithQuantity productWithQuantity = new ProductWithQuantity(productId, 2);
+        final User user = new User("johndoe@yahoo.com", "12345", Role.USER);
+        final Authentication authMock = mock(Authentication.class);
+        final SecurityContext securityContext = mock(SecurityContext.class);
+        Cart cart = new Cart(1L, user, new HashMap<>());
+        Product product =  new Product(productId, "image1", "name1", 50, 4, "Description1", 5, Type.WEIGHABLE, 1,
+                ProductCategory.FRUITS, 10);
+
+        when(authMock.getPrincipal()).thenReturn(new UserDetailsImpl(user));
+        when(securityContext.getAuthentication()).thenReturn(authMock);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(cartRepository.findByUserId(user.getId())).thenReturn(cart);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        QuantityResponse actualQuantityResponse =
+                cartService.addOneProductQuantityInCart(productWithQuantity);
+
+        verify(cartRepository).save(cart);
+
+        int quantityOfCertainProductsInCart = cart.getCartItems().size();
+        assertThat(actualQuantityResponse.getQuantity())
+                .isEqualTo(quantityOfCertainProductsInCart);
+        assertThat(actualQuantityResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+        SecurityContextHolder.clearContext();
+    }
+
+    @Test
+    void addOneProductQuantityInCart_AddProductToCartWithSameProduct_ReturnQuantityResponse() {
+        final long productId = 1L;
+        int productQuantityFromRequest = 2;
+        ProductWithQuantity productWithQuantity = new ProductWithQuantity(productId, productQuantityFromRequest);
+        final User user = new User("johndoe@yahoo.com", "12345", Role.USER);
+        final Authentication authMock = mock(Authentication.class);
+        final SecurityContext securityContext = mock(SecurityContext.class);
+        Product product =  new Product(productId, "image1", "name1", 50, 4, "Description1", 5, Type.WEIGHABLE, 1,
+                ProductCategory.FRUITS, 10);
+        int initialProductQuantityInStock = 3;
+        HashMap<Product, Integer> cartItems = new HashMap<>() {{
+            put(product, initialProductQuantityInStock);
+        }};
+        Cart cart = new Cart(1L, user, cartItems);
+
+        when(authMock.getPrincipal()).thenReturn(new UserDetailsImpl(user));
+        when(securityContext.getAuthentication()).thenReturn(authMock);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(cartRepository.findByUserId(user.getId())).thenReturn(cart);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        QuantityResponse actualQuantityResponse =
+                cartService.addOneProductQuantityInCart(productWithQuantity);
+
+        verify(cartRepository).save(cart);
+
+        int quantityOfCertainProductsInCart = cart.getCartItems().size();
+        assertThat(actualQuantityResponse.getQuantity()).isEqualTo(quantityOfCertainProductsInCart);
+        assertThat(actualQuantityResponse.getStatus()).isEqualTo(HttpStatus.OK.value());
 
         SecurityContextHolder.clearContext();
     }

@@ -8,7 +8,6 @@ import com.grocery.shop.dto.UserDetailsImpl;
 import com.grocery.shop.exception.NoMoreProductsInStockException;
 import com.grocery.shop.exception.NotEnoughProductsInStockException;
 import com.grocery.shop.exception.ProductNotFoundException;
-import com.grocery.shop.exception.ProductsNotFoundException;
 import com.grocery.shop.exception.UserNotFoundException;
 import com.grocery.shop.mapper.ProductMapper;
 import com.grocery.shop.model.Cart;
@@ -63,10 +62,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDto checkoutProductsForLoggedInUser() {
-        UserDetailsImpl userFromSecurity = (UserDetailsImpl) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        String email = userFromSecurity.getUsername();
+        final String email = getEmailFromSecurity();
 
         User userWithId = userRepository.findByEmail(email).orElseThrow(
                 UserNotFoundException::new);
@@ -89,18 +85,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public QuantityResponse addOne(final ProductWithQuantity productWithQuantityFromReques) {
-        final UserDetailsImpl userFromSecurity = (UserDetailsImpl) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        final String email = userFromSecurity.getUsername();
+    public QuantityResponse addOneProductQuantityInCart(final ProductWithQuantity productWithQuantityFromReques) {
+        final String email = getEmailFromSecurity();
 
         final User userWithId = userRepository.findByEmail(email).orElseThrow(
                 UserNotFoundException::new
         );
         final Cart cart = cartRepository.findByUserId(userWithId.getId());
         final Product product = productRepository.findById(productWithQuantityFromReques.getProductId())
-                .orElseThrow(() -> new ProductsNotFoundException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException(userWithId.getId()));
 
         final Map<Product, Integer> cartItems = cart.getCartItems();
         final int additionalProductQuantityFromRequest = productWithQuantityFromReques.getQuantity();
@@ -123,5 +116,41 @@ public class CartServiceImpl implements CartService {
 
         final int cartSize = cartItems.size();
         return new QuantityResponse(HttpStatus.OK.value(), cartSize);
+    }
+
+    @Override
+    public void editOneProductQuantityInCart(final ProductWithQuantity productWithQuantityFromReques) {
+        final String email = getEmailFromSecurity();
+
+        final User userWithId = userRepository.findByEmail(email).orElseThrow(
+                UserNotFoundException::new
+        );
+        final Cart cart = cartRepository.findByUserId(userWithId.getId());
+        final Product product = productRepository.findById(productWithQuantityFromReques.getProductId())
+                .orElseThrow(() -> new ProductNotFoundException(userWithId.getId()));
+
+        final Map<Product, Integer> cartItems = cart.getCartItems();
+        final int productQuantityFromRequest = productWithQuantityFromReques.getQuantity();
+
+        if (cartItems.containsKey(product)) {
+            final int productQuantityFromStock = product.getTotalCountInStock();
+
+            if (productQuantityFromRequest > productQuantityFromStock) {
+                throw new NoMoreProductsInStockException(productQuantityFromStock);
+            }
+
+            cartItems.replace(product, productQuantityFromRequest);
+        } else {
+            throw new ProductNotFoundException(userWithId.getId());
+        }
+
+        cartRepository.save(cart);
+    }
+
+    private String getEmailFromSecurity() {
+        final UserDetailsImpl userFromSecurity = (UserDetailsImpl) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+        return userFromSecurity.getUsername();
     }
 }
